@@ -13,6 +13,7 @@
     "@aws-cdk/assert": "1.114.0"
   },
   "dependencies": {
+    "@aws-cdk/aws-iam": "1.114.0",
     "@aws-cdk/core": "1.114.0",
     "@serverless-stack/cli": "0.40.1",
     "@serverless-stack/resources": "0.40.1",
