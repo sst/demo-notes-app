@@ -5,7 +5,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { initSentry } from './lib/errorLib';
 import config from './config';
+
+initSentry();
 
 Amplify.configure({
   Auth: {
