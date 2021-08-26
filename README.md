@@ -1,44 +1,70 @@
-# Getting Started with Serverless Stack (SST)
+# SST Demo Notes App [![Seed Status](https://api.seed.run/serverless-stack/demo-notes-app/stages/prod/build_badge)](https://console.seed.run/serverless-stack/demo-notes-app)
 
-This project was bootstrapped with [Create Serverless Stack](https://docs.serverless-stack.com/packages/create-serverless-stack).
+The [Serverless Stack Guide](https://serverless-stack.com/#guide) is a comprehensive open source tutorial for building and deploying full-stack apps using serverless and React on AWS.
 
-Start by installing the dependencies.
+We create a [note taking app](https://demo.serverless-stack.com) from scratch. Using React.js, AWS Lambda, API Gateway, DynamoDB, and Cognito.
+
+![Demo App](screenshot.png)
+
+This repo is a full-stack serverless app built with [SST](https://github.com/serverless-stack/serverless-stack).
+
+- The `lib/` directory defines our AWS infrastructure using AWS CDK.
+- The `src/` directory contains the Lambda functions that power the CRUD API.
+- The `frontend/` directory contains the React app.
+
+It's a single-page React app powered by a serverless CRUD API. We also cover how add user authentication, handle file uploads, and process credit card payments with Stripe.
+
+### Usage
+
+Clone this repo.
 
 ```bash
+$ git clone https://github.com/serverless-stack/demo-notes-app
+```
+
+Install dependencies.
+
+``` bash
 $ npm install
 ```
 
-## Commands
+#### Developing Locally
 
-### `npm run start`
+Start the [Live Lambda Dev Environment](https://docs.serverless-stack.com/live-lambda-development).
 
-Starts the local Lambda development environment.
+``` bash
+$ npx sst start
+```
 
-### `npm run build`
+Install dependencies for the frontend React app.
 
-Build your app and synthesize your stacks.
+``` bash
+$ cd frontend
+$ npm install
+```
 
-Generates a `.build/` directory with the compiled files and a `.build/cdk.out/` directory with the synthesized CloudFormation stacks.
+Start the React local dev environment from the `frontend/` dir.
 
-### `npm run deploy [stack]`
+``` bash
+$ npm start
+```
 
-Deploy all your stacks to AWS. Or optionally deploy, a specific stack.
+#### Running Tests
 
-### `npm run remove [stack]`
+From the project root.
 
-Remove all your stacks and all of their resources from AWS. Or optionally removes, a specific stack.
+``` bash
+$ npx sst test
+```
 
-### `npm run test`
+#### Deploying to Prod
 
-Runs your tests using Jest. Takes all the [Jest CLI options](https://jestjs.io/docs/en/cli).
+Run this in the project root to deploy it to prod.
 
-## Documentation
+``` bash
+$ npx sst deploy
+```
 
-Learn more about the Serverless Stack.
-- [Docs](https://docs.serverless-stack.com)
-- [@serverless-stack/cli](https://docs.serverless-stack.com/packages/cli)
-- [@serverless-stack/resources](https://docs.serverless-stack.com/packages/resources)
+---
 
-## Community
-
-[Follow us on Twitter](https://twitter.com/ServerlessStack) or [post on our forums](https://discourse.serverless-stack.com).
+Join the SST community over on [Slack](https://launchpass.com/serverless-stack) and follow us on [Twitter](https://twitter.com/ServerlessStack).
