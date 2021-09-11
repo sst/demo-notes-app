@@ -28,6 +28,8 @@ Install dependencies.
 $ npm install
 ```
 
+This project refers to a `.env.local` file with a secret that we are not checking in to the repo. Make sure to create one before deploying - https://serverless-stack.com/chapters/handling-secrets-in-sst.html.
+
 #### Developing Locally
 
 Start the [Live Lambda Dev Environment](https://docs.serverless-stack.com/live-lambda-development).
