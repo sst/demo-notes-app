@@ -2,5 +2,6 @@
   "name": "notes",
   "stage": "dev",
   "region": "us-east-1",
+  "main": "stacks/index.js",
   "lint": true
 }
