@@ -8,7 +8,7 @@ We create a [note taking app](https://demo.serverless-stack.com) from scratch. U
 
 This repo is a full-stack serverless app built with [SST](https://github.com/serverless-stack/serverless-stack).
 
-- The `lib/` directory defines our AWS infrastructure using AWS CDK.
+- The `stacks/` directory defines our AWS infrastructure using AWS CDK.
 - The `src/` directory contains the Lambda functions that power the CRUD API.
 - The `frontend/` directory contains the React app.
 
