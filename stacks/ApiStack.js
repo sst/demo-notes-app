@@ -1,41 +1,39 @@
-import * as sst from "@serverless-stack/resources";
+import { Api, use } from "@serverless-stack/resources";
+import { StorageStack } from "./StorageStack";
 
-export default class ApiStack extends sst.Stack {
-  // Public reference to the API
-  api;
+export function ApiStack({ stack, app }) {
+  const { table } = use(StorageStack);
 
-  constructor(scope, id, props) {
-    super(scope, id, props);
-
-    const { table } = props;
-
-    // Create the API
-    this.api = new sst.Api(this, "Api", {
-      customDomain: scope.stage === "prod" ? "notes-api.seed-demo.club" : undefined,
-      defaultAuthorizationType: "AWS_IAM",
-      defaultFunctionProps: {
+  // Create the API
+  const api = new Api(stack, "Api", {
+    customDomain: app.stage === "prod" ? "notes-api.seed-demo.club" : undefined,
+    defaults: {
+      authorizer: "iam",
+      function: {
+        permissions: [table],
         environment: {
           TABLE_NAME: table.tableName,
           STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
         },
       },
-      routes: {
-        "GET    /notes": "src/list.main",
-        "POST   /notes": "src/create.main",
-        "GET    /notes/{id}": "src/get.main",
-        "PUT    /notes/{id}": "src/update.main",
-        "DELETE /notes/{id}": "src/delete.main",
+    },
+    routes: {
+      "GET    /notes": "functions/list.main",
+      "POST   /notes": "functions/create.main",
+      "GET    /notes/{id}": "functions/get.main",
+      "PUT    /notes/{id}": "functions/update.main",
+      "DELETE /notes/{id}": "functions/delete.main",
+      "POST   /billing": "functions/billing.main",
+    },
+  });
 
-        "POST   /billing": "src/billing.main",
-      },
-    });
+  // Show the API endpoint in the output
+  stack.addOutputs({
+    ApiEndpoint: api.customDomainUrl || api.url,
+  });
 
-    // Allow the API to access the table
-    this.api.attachPermissions([table]);
-
-    // Show the API endpoint in the output
-    this.addOutputs({
-      ApiEndpoint: this.api.customDomainUrl || this.api.url,
-    });
-  }
+  // Return the API resource
+  return {
+    api,
+  };
 }

@@ -9,7 +9,7 @@ We create a [note taking app](https://demo.serverless-stack.com) from scratch. U
 This repo is a full-stack serverless app built with [SST](https://github.com/serverless-stack/serverless-stack).
 
 - The `stacks/` directory defines our AWS infrastructure using AWS CDK.
-- The `src/` directory contains the Lambda functions that power the CRUD API.
+- The `backend/` directory contains the Lambda functions that power the CRUD API.
 - The `frontend/` directory contains the React app.
 
 It's a single-page React app powered by a serverless CRUD API. We also cover how add user authentication, handle file uploads, and process credit card payments with Stripe.
@@ -24,7 +24,7 @@ $ git clone https://github.com/serverless-stack/demo-notes-app
 
 Install dependencies.
 
-``` bash
+```bash
 $ npm install
 ```
 
@@ -34,20 +34,20 @@ This project refers to a `.env.local` file with a secret that we are not checkin
 
 Start the [Live Lambda Dev Environment](https://docs.serverless-stack.com/live-lambda-development).
 
-``` bash
-$ npx sst start
+```bash
+$ npm start
 ```
 
 Install dependencies for the frontend React app.
 
-``` bash
+```bash
 $ cd frontend
 $ npm install
 ```
 
 Start the React local dev environment from the `frontend/` dir.
 
-``` bash
+```bash
 $ npm start
 ```
 
@@ -55,7 +55,7 @@ $ npm start
 
 From the project root.
 
-``` bash
+```bash
 $ npx sst test
 ```
 
@@ -63,7 +63,7 @@ $ npx sst test
 
 Run this in the project root to deploy it to prod.
 
-``` bash
+```bash
 $ npx sst deploy
 ```
 

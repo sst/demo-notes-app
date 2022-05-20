@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { API } from "aws-amplify";
 import Form from "react-bootstrap/Form";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../lib/errorLib";
 import { s3Upload } from "../lib/awsLib";
@@ -10,7 +10,7 @@ import "./NewNote.css";
 
 export default function NewNote() {
   const file = useRef(null);
-  const history = useHistory();
+  const nav = useNavigate();
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,17 +40,16 @@ export default function NewNote() {
       const attachment = file.current ? await s3Upload(file.current) : null;
 
       await createNote({ content, attachment });
-      history.push("/");
+      nav("/");
     } catch (e) {
       onError(e);
       setIsLoading(false);
     }
   }
-  
 
   function createNote(note) {
     return API.post("notes", "/notes", {
-      body: note
+      body: note,
     });
   }
 
@@ -69,7 +68,7 @@ export default function NewNote() {
           <Form.Control onChange={handleFileChange} type="file" />
         </Form.Group>
         <LoaderButton
-          block
+          block="true"
           type="submit"
           size="lg"
           variant="primary"

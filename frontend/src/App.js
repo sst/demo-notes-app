@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Auth } from "aws-amplify";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { AppContext } from "./lib/contextLib";
@@ -11,7 +11,7 @@ import Routes from "./Routes";
 import "./App.css";
 
 function App() {
-  const history = useHistory();
+  const nav = useNavigate();
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, userHasAuthenticated] = useState(false);
 
@@ -23,9 +23,8 @@ function App() {
     try {
       await Auth.currentSession();
       userHasAuthenticated(true);
-    }
-    catch(e) {
-      if (e !== 'No current user') {
+    } catch (e) {
+      if (e !== "No current user") {
         onError(e);
       }
     }
@@ -38,7 +37,7 @@ function App() {
 
     userHasAuthenticated(false);
 
-    history.push("/login");
+    nav("/login");
   }
 
   return (
@@ -74,7 +73,9 @@ function App() {
           </Navbar.Collapse>
         </Navbar>
         <ErrorBoundary>
-          <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+          <AppContext.Provider
+            value={{ isAuthenticated, userHasAuthenticated }}
+          >
             <Routes />
           </AppContext.Provider>
         </ErrorBoundary>

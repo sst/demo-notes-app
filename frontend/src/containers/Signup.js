@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Auth } from "aws-amplify";
 import Form from "react-bootstrap/Form";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../lib/contextLib";
 import { useFormFields } from "../lib/hooksLib";
@@ -15,7 +15,7 @@ export default function Signup() {
     confirmPassword: "",
     confirmationCode: "",
   });
-  const history = useHistory();
+  const nav = useNavigate();
   const [newUser, setNewUser] = useState(null);
   const { userHasAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +60,7 @@ export default function Signup() {
       await Auth.signIn(fields.email, fields.password);
 
       userHasAuthenticated(true);
-      history.push("/");
+      nav("/");
     } catch (e) {
       onError(e);
       setIsLoading(false);
@@ -81,7 +81,7 @@ export default function Signup() {
           <Form.Text muted>Please check your email for the code.</Form.Text>
         </Form.Group>
         <LoaderButton
-          block
+          block="true"
           size="lg"
           type="submit"
           variant="success"
@@ -123,7 +123,7 @@ export default function Signup() {
           />
         </Form.Group>
         <LoaderButton
-          block
+          block="true"
           size="lg"
           type="submit"
           variant="success"

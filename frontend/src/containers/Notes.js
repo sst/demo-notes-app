@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import { API, Storage } from "aws-amplify";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../lib/errorLib";
 import { s3Upload } from "../lib/awsLib";
@@ -11,7 +11,7 @@ import "./Notes.css";
 export default function Notes() {
   const file = useRef(null);
   const { id } = useParams();
-  const history = useHistory();
+  const nav = useNavigate();
   const [note, setNote] = useState(null);
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +55,7 @@ export default function Notes() {
 
   function saveNote(note) {
     return API.put("notes", `/notes/${id}`, {
-      body: note
+      body: note,
     });
   }
 
@@ -82,9 +82,9 @@ export default function Notes() {
 
       await saveNote({
         content,
-        attachment: attachment || note.attachment
+        attachment: attachment || note.attachment,
       });
-      history.push("/");
+      nav("/");
     } catch (e) {
       onError(e);
       setIsLoading(false);
@@ -110,7 +110,7 @@ export default function Notes() {
 
     try {
       await deleteNote();
-      history.push("/");
+      nav("/");
     } catch (e) {
       onError(e);
       setIsDeleting(false);
@@ -144,7 +144,7 @@ export default function Notes() {
             <Form.Control onChange={handleFileChange} type="file" />
           </Form.Group>
           <LoaderButton
-            block
+            block="true"
             size="lg"
             type="submit"
             isLoading={isLoading}
@@ -153,7 +153,7 @@ export default function Notes() {
             Save
           </LoaderButton>
           <LoaderButton
-            block
+            block="true"
             size="lg"
             variant="danger"
             onClick={handleDelete}
