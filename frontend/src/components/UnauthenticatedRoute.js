@@ -1,5 +1,5 @@
 import React, { cloneElement } from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAppContext } from "../lib/contextLib";
 
 function querystring(name, url = window.location.href) {
@@ -15,17 +15,13 @@ function querystring(name, url = window.location.href) {
 }
 
 export default function UnauthenticatedRoute(props) {
-  const { children, ...rest } = props;
   const { isAuthenticated } = useAppContext();
+  const { children } = props;
   const redirect = querystring("redirect");
 
-  return (
-    <Route {...rest}>
-      {!isAuthenticated ? (
-        cloneElement(children, props)
-      ) : (
-        <Redirect to={redirect ? redirect : "/"} />
-      )}
-    </Route>
-  );
+  if (isAuthenticated) {
+    return <Navigate to={redirect || "/"} />;
+  }
+
+  return cloneElement(children, props);
 }

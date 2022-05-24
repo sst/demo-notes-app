@@ -1,44 +1,40 @@
 import * as iam from "aws-cdk-lib/aws-iam";
-import * as sst from "@serverless-stack/resources";
+import { Auth, use } from "@serverless-stack/resources";
+import { StorageStack } from "./StorageStack";
+import { ApiStack } from "./ApiStack";
 
-export default class AuthStack extends sst.Stack {
-  // Public reference to the auth instance
-  auth;
+export function AuthStack({ stack, app }) {
+  const { bucket } = use(StorageStack);
+  const { api } = use(ApiStack);
 
-  constructor(scope, id, props) {
-    super(scope, id, props);
+  // Create a Cognito User Pool and Identity Pool
+  const auth = new Auth(stack, "Auth", {
+    login: ["email"],
+  });
 
-    const { api, bucket } = props;
+  auth.attachPermissionsForAuthUsers([
+    // Allow access to the API
+    api,
+    // Policy granting access to a specific folder in the bucket
+    new iam.PolicyStatement({
+      actions: ["s3:*"],
+      effect: iam.Effect.ALLOW,
+      resources: [
+        bucket.bucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
+      ],
+    }),
+  ]);
 
-    // Create a Cognito User Pool and Identity Pool
-    this.auth = new sst.Auth(this, "Auth", {
-      cognito: {
-        userPool: {
-          // Users can login with their email and password
-          signInAliases: { email: true },
-        },
-      },
-    });
+  // Show the auth resources in the output
+  stack.addOutputs({
+    Region: app.region,
+    UserPoolId: auth.userPoolId,
+    IdentityPoolId: auth.cognitoIdentityPoolId,
+    UserPoolClientId: auth.userPoolClientId,
+  });
 
-    this.auth.attachPermissionsForAuthUsers([
-      // Allow access to the API
-      api,
-      // Policy granting access to a specific folder in the bucket
-      new iam.PolicyStatement({
-        actions: ["s3:*"],
-        effect: iam.Effect.ALLOW,
-        resources: [
-          bucket.bucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
-        ],
-      }),
-    ]);
-
-    // Show the auth resources in the output
-    this.addOutputs({
-      Region: scope.region,
-      UserPoolId: this.auth.cognitoUserPool.userPoolId,
-      IdentityPoolId: this.auth.cognitoCfnIdentityPool.ref,
-      UserPoolClientId: this.auth.cognitoUserPoolClient.userPoolClientId,
-    });
-  }
+  // Return the auth resource
+  return {
+    auth,
+  };
 }

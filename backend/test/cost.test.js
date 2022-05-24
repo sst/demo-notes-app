@@ -1,4 +1,5 @@
-import { calculateCost } from "../src/util/cost";
+import { expect, test } from "vitest";
+import { calculateCost } from "../util/cost";
 
 test("Lowest tier", () => {
   const storage = 10;

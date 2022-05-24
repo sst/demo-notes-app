@@ -4,7 +4,7 @@ import AWS from "aws-sdk";
 let logs;
 
 // Log AWS SDK calls
-AWS.config.logger = { log: debug };
+AWS.config.logger = debug;
 
 export default function debug() {
   logs.push({

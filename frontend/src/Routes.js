@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 import Notes from "./containers/Notes";
@@ -10,31 +10,53 @@ import NotFound from "./containers/NotFound";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 
-export default function Routes() {
+export default function Links() {
   return (
-    <Switch>
-      <Route exact path="/">
-        <Home />
-      </Route>
-      <UnauthenticatedRoute exact path="/login">
-        <Login />
-      </UnauthenticatedRoute>
-      <UnauthenticatedRoute exact path="/signup">
-        <Signup />
-      </UnauthenticatedRoute>
-      <AuthenticatedRoute exact path="/settings">
-        <Settings />
-      </AuthenticatedRoute>
-      <AuthenticatedRoute exact path="/notes/new">
-        <NewNote />
-      </AuthenticatedRoute>
-      <AuthenticatedRoute exact path="/notes/:id">
-        <Notes />
-      </AuthenticatedRoute>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route
+        path="/login"
+        element={
+          <UnauthenticatedRoute>
+            <Login />
+          </UnauthenticatedRoute>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <UnauthenticatedRoute>
+            <Signup />
+          </UnauthenticatedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <AuthenticatedRoute>
+            <Settings />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/notes/new"
+        element={
+          <AuthenticatedRoute>
+            <NewNote />
+          </AuthenticatedRoute>
+        }
+      />
+
+      <Route
+        path="/notes/:id"
+        element={
+          <AuthenticatedRoute>
+            <Notes />
+          </AuthenticatedRoute>
+        }
+      />
       {/* Finally, catch all unmatched routes */}
-      <Route>
-        <NotFound />
-      </Route>
-    </Switch>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }

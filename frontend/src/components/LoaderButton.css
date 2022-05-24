@@ -1,3 +1,7 @@
+.LoaderButton {
+  margin-top: 10px;
+}
+
 .LoaderButton .spinning {
   margin-right: 7px;
   top: 2px;

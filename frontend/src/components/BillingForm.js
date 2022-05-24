@@ -84,7 +84,7 @@ export default function BillingForm({ isLoading, onSubmit }) {
         }}
       />
       <LoaderButton
-        block
+        block="true"
         size="lg"
         type="submit"
         isLoading={isLoading}

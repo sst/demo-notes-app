@@ -12,7 +12,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: "",
-    password: ""
+    password: "",
   });
 
   function validateForm() {
@@ -54,7 +54,7 @@ export default function Login() {
           />
         </Form.Group>
         <LoaderButton
-          block
+          block="true"
           size="lg"
           type="submit"
           isLoading={isLoading}

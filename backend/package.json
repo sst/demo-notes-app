@@ -1,0 +1,14 @@
+{
+  "name": "@demo-notes-app/backend",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {},
+  "dependencies": {
+    "aws-sdk": "^2.1138.0",
+    "stripe": "^9.1.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.97"
+  }
+}
