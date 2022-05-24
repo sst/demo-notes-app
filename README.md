@@ -35,7 +35,7 @@ This project refers to a `.env.local` file with a secret that we are not checkin
 Start the [Live Lambda Dev Environment](https://docs.serverless-stack.com/live-lambda-development).
 
 ```bash
-$ npm start
+$ npx sst start
 ```
 
 Install dependencies for the frontend React app.
@@ -56,7 +56,7 @@ $ npm start
 From the project root.
 
 ```bash
-$ npx sst test
+$ npm test
 ```
 
 #### Deploying to Prod

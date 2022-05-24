@@ -1,6 +1,6 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { App, getStack } from "@serverless-stack/resources";
-import { StorageStack } from "../../stacks/StorageStack";
+import { StorageStack } from "../StorageStack";
 import { test } from "vitest";
 
 test("Test StorageStack", () => {

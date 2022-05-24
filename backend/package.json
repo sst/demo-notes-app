@@ -6,7 +6,6 @@
   "dependencies": {
     "aws-sdk": "^2.1138.0",
     "stripe": "^9.1.0",
-    "util": "^0.12.4",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
