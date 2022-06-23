@@ -1,6 +1,6 @@
 {
   "hosted-zone:account=087220554750:domainName=seed-demo.club:region=us-east-1": {
-    "Id": "/hostedzone/Z1RY6NI8H6QGFX",
+    "Id": "/hostedzone/Z084547130O3CW3336O7C",
     "Name": "seed-demo.club."
   },
   "hosted-zone:account=087220554750:domainName=demo.serverless-stack.com:region=us-east-1": {
