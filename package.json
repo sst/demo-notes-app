@@ -18,6 +18,6 @@
     "vitest": "^0.12.6"
   },
   "workspaces": [
-    "backend"
+    "services"
   ]
 }
