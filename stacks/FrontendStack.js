@@ -12,7 +12,7 @@ export function FrontendStack({ stack, app }) {
   const site = new ReactStaticSite(stack, "ReactSite", {
     path: "frontend",
     customDomain:
-      app.stage === "prod" ? "demo.serverless-stack.com" : undefined,
+      app.stage === "prod" ? "demo.sst.dev" : undefined,
     // Pass in our environment variables
     environment: {
       REACT_APP_API_URL: api.customDomainUrl || api.url,
