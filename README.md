@@ -69,4 +69,4 @@ $ npx sst deploy
 
 ---
 
-Join the SST community over on [Slack](https://serverless-stack.com/slack) and follow us on [Twitter](https://twitter.com/ServerlessStack).
+Join the SST community over on [Discord](https://discord.gg/sst) and follow us on [Twitter](https://twitter.com/SST_dev).
