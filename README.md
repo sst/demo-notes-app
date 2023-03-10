@@ -9,7 +9,7 @@ We create a [note taking app](https://demo.sst.dev) from scratch. Using React.js
 This repo is a full-stack serverless app built with [SST](https://github.com/serverless-stack/sst).
 
 - The `stacks/` directory defines our AWS infrastructure using AWS CDK.
-- The `services/` directory contains the Lambda functions that power the CRUD API.
+- The `packages/` directory contains the Lambda functions that power the CRUD API.
 - The `frontend/` directory contains the React app.
 
 It's a single-page React app powered by a serverless CRUD API. We also cover how add user authentication, handle file uploads, and process credit card payments with Stripe.
@@ -35,7 +35,7 @@ This project refers to a `.env.local` file with a secret that we are not checkin
 Start the [Live Lambda Dev Environment](https://docs.sst.dev/live-lambda-development).
 
 ```bash
-$ npx sst start
+$ npx sst dev
 ```
 
 Install dependencies for the frontend React app.
