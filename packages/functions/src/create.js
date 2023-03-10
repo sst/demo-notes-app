@@ -1,11 +1,12 @@
+import { Table } from "sst/node/table";
 import * as uuid from "uuid";
-import handler from "../util/handler";
-import dynamoDb from "../util/dynamodb";
+import handler from "@notes/core/handler";
+import dynamoDb from "@notes/core/dynamodb";
 
 export const main = handler(async (event) => {
   const data = JSON.parse(event.body);
   const params = {
-    TableName: process.env.TABLE_NAME,
+    TableName: Table.Notes.tableName,
     Item: {
       // The attributes of the item to be created
       userId: event.requestContext.authorizer.iam.cognitoIdentity.identityId,

@@ -1,6 +1,6 @@
 import Stripe from "stripe";
-import handler from "../util/handler";
-import { calculateCost } from "../util/cost";
+import handler from "@notes/core/handler";
+import { calculateCost } from "@notes/core/cost";
 
 export const main = handler(async (event) => {
   const { storage, source } = JSON.parse(event.body);

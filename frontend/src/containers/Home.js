@@ -41,13 +41,13 @@ export default function Home() {
         <LinkContainer to="/notes/new">
           <ListGroup.Item action className="py-3 text-nowrap text-truncate">
             <BsPencilSquare size={17} />
-            <span className="ml-2 font-weight-bold">Create a new note</span>
+            <span className="ms-2 fw-bold">Create a new note</span>
           </ListGroup.Item>
         </LinkContainer>
         {notes.map(({ noteId, content, createdAt }) => (
           <LinkContainer key={noteId} to={`/notes/${noteId}`}>
-            <ListGroup.Item action>
-              <span className="font-weight-bold">
+            <ListGroup.Item action className="text-nowrap text-truncate">
+              <span className="fw-bold">
                 {content.trim().split("\n")[0]}
               </span>
               <br />

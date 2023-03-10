@@ -1,6 +1,6 @@
-import { Bucket, Table } from "@serverless-stack/resources";
+import { Bucket, Table } from "sst/constructs";
 
-export function StorageStack({ stack }) {
+export function StorageStack({ stack, app }) {
   // Create an S3 bucket
   const bucket = new Bucket(stack, "Uploads", {
     cors: [
@@ -14,7 +14,7 @@ export function StorageStack({ stack }) {
   });
 
   // Create the DynamoDB table
-  const table = new Table(stack, "Notes2", {
+  const table = new Table(stack, "Notes", {
     fields: {
       userId: "string",
       noteId: "string",
@@ -22,7 +22,6 @@ export function StorageStack({ stack }) {
     primaryIndex: { partitionKey: "userId", sortKey: "noteId" },
   });
 
-  // Return the bucket and table resources
   return {
     table,
     bucket,

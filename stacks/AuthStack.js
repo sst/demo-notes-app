@@ -1,5 +1,5 @@
 import * as iam from "aws-cdk-lib/aws-iam";
-import { Auth, use } from "@serverless-stack/resources";
+import { Cognito, use } from "sst/constructs";
 import { StorageStack } from "./StorageStack";
 import { ApiStack } from "./ApiStack";
 
@@ -8,7 +8,7 @@ export function AuthStack({ stack, app }) {
   const { api } = use(ApiStack);
 
   // Create a Cognito User Pool and Identity Pool
-  const auth = new Auth(stack, "Auth", {
+  const auth = new Cognito(stack, "Auth", {
     login: ["email"],
   });
 
