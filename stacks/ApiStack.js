@@ -6,7 +6,7 @@ export function ApiStack({ stack, app }) {
 
   // Create the API
   const api = new Api(stack, "Api", {
-    customDomain: app.stage === "prod" ? "notes-api.seed-demo.club" : undefined,
+    customDomain: "http://localhost:3000", //app.stage === "prod" ? "notes-api.seed-demo.club" : undefined,
     defaults: {
       authorizer: "iam",
       function: {
