@@ -23,6 +23,9 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+      vitest:
+        specifier: ^0.34.3
+        version: 0.34.3
 
   packages/core:
     dependencies:
