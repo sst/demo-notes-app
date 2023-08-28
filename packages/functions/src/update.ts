@@ -9,7 +9,7 @@ export const main = handler(async (event) => {
     TableName: Table.Notes.tableName,
     Key: {
       // The attributes of the item to be created
-      userId: "123", // The id of the author
+      userId: event.requestContext.authorizer?.iam.cognitoIdentity.identityId,
       noteId: event?.pathParameters?.id, // The id of the note from the path
     },
     // 'UpdateExpression' defines the attributes to be updated
