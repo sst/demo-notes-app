@@ -28,7 +28,7 @@ Install dependencies.
 $ pnpm install
 ```
 
-This project uses a secret that we are not checking in to the repo. Make sure to create one before deploying - https://sst.dev/chapters/handling-secrets-in-sst.html.
+This project uses a secret that we are not checking in to the repo. Make sure to [create one before deploying](https://sst.dev/chapters/handling-secrets-in-sst.html).
 
 ```bash
 $ pnpm sst secrets set STRIPE_SECRET_KEY <YOUR STRIPE SECRET TEST KEY>
