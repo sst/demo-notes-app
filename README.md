@@ -1,16 +1,16 @@
 # SST Demo Notes App [![Seed Status](https://api.seed.run/serverless-stack/demo-notes-app/stages/prod/build_badge)](https://console.seed.run/serverless-stack/demo-notes-app)
 
-The [Serverless Stack Guide](https://sst.dev/guide) is a comprehensive open source tutorial for building and deploying full-stack apps using serverless and React on AWS.
+The [SST Guide](https://sst.dev/guide) is a comprehensive open source tutorial for building and deploying full-stack apps using serverless and React on AWS.
 
-We create a [note taking app](https://demo.sst.dev) from scratch. Using React.js, AWS Lambda, API Gateway, DynamoDB, and Cognito.
+We create a note taking app from scratch — [**demo.sst.dev**](https://demo.sst.dev)
 
 ![Demo App](screenshot.png)
 
-This repo is a full-stack serverless app built with [SST](https://github.com/serverless-stack/sst).
+We use React.js, AWS Lambda, API Gateway, DynamoDB, and Cognito. This repo is a full-stack serverless app built with [SST](https://github.com/sst/sst).
 
 - The `stacks/` directory defines our AWS infrastructure using AWS CDK.
-- The `packages/` directory contains the Lambda functions that power the CRUD API.
-- The `frontend/` directory contains the React app.
+- The `packages/functions` directory contains the Lambda functions that power the CRUD API.
+- The `packages/frontend` directory contains the React app.
 
 It's a single-page React app powered by a serverless CRUD API. We also cover how add user authentication, handle file uploads, and process credit card payments with Stripe.
 
@@ -19,36 +19,33 @@ It's a single-page React app powered by a serverless CRUD API. We also cover how
 Clone this repo.
 
 ```bash
-$ git clone https://github.com/serverless-stack/demo-notes-app
+$ git clone https://github.com/sst/demo-notes-app
 ```
 
 Install dependencies.
 
 ```bash
-$ npm install
+$ pnpm install
 ```
 
-This project refers to a `.env.local` file with a secret that we are not checking in to the repo. Make sure to create one before deploying - https://sst.dev/chapters/handling-secrets-in-sst.html.
+This project uses a secret that we are not checking in to the repo. Make sure to [create one before deploying](https://sst.dev/chapters/handling-secrets-in-sst.html).
+
+```bash
+$ pnpm sst secrets set STRIPE_SECRET_KEY <YOUR STRIPE SECRET TEST KEY>
+```
 
 #### Developing Locally
 
 Start the [Live Lambda Dev Environment](https://docs.sst.dev/live-lambda-development).
 
 ```bash
-$ npx sst dev
+$ pnpmx sst dev
 ```
 
-Install dependencies for the frontend React app.
+Start the React local dev environment from the `packges/frontend/` dir.
 
 ```bash
-$ cd frontend
-$ npm install
-```
-
-Start the React local dev environment from the `frontend/` dir.
-
-```bash
-$ npm start
+$ pnpm run dev
 ```
 
 #### Running Tests
@@ -56,7 +53,7 @@ $ npm start
 From the project root.
 
 ```bash
-$ npm test
+$ pnpm test
 ```
 
 #### Deploying to Prod
@@ -64,7 +61,7 @@ $ npm test
 Run this in the project root to deploy it to prod.
 
 ```bash
-$ npx sst deploy
+$ pnpm sst deploy --stage prod
 ```
 
 ---
