@@ -39,7 +39,7 @@ $ pnpm sst secrets set STRIPE_SECRET_KEY <YOUR STRIPE SECRET TEST KEY>
 Start the [Live Lambda Dev Environment](https://docs.sst.dev/live-lambda-development).
 
 ```bash
-$ pnpmx sst dev
+$ pnpm sst dev
 ```
 
 Start the React local dev environment from the `packges/frontend/` dir.
