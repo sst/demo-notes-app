@@ -10,7 +10,7 @@
     "@types/aws-lambda": "^8.10.119",
     "@types/node": "^20.5.7",
     "@types/uuid": "^9.0.2",
-    "sst": "^2.24.17",
+    "sst": "^2.40.3",
     "vitest": "^0.34.3"
   },
   "dependencies": {
