@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { Config } from "sst/node/config";
+import { Resource } from "sst";
 import handler from "@notes/core/handler";
 import { calculateCost } from "@notes/core/cost";
 
@@ -9,7 +9,7 @@ export const main = handler(async (event) => {
   const description = "Scratch charge";
 
   // Load our secret key
-  const stripe = new Stripe(Config.STRIPE_SECRET_KEY, {
+  const stripe = new Stripe(Resource.StripeSecretKey.value, {
     apiVersion: "2023-08-16",
   });
 

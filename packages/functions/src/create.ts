@@ -1,7 +1,10 @@
 import * as uuid from "uuid";
-import { Table } from "sst/node/table";
+import { Resource } from "sst";
 import handler from "@notes/core/handler";
-import dynamoDb from "@notes/core/dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+
+const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const main = handler(async (event) => {
   let data = {
@@ -14,7 +17,7 @@ export const main = handler(async (event) => {
   }
 
   const params = {
-    TableName: Table.Notes.tableName,
+    TableName: Resource.Notes.name,
     Item: {
       // The attributes of the item to be created
       userId: event.requestContext.authorizer?.iam.cognitoIdentity.identityId,
@@ -25,7 +28,7 @@ export const main = handler(async (event) => {
     },
   };
 
-  await dynamoDb.put(params);
+  await dynamoDb.send(new PutCommand(params));
 
   return JSON.stringify(params.Item);
 });

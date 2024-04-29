@@ -1,10 +1,13 @@
-import { Table } from "sst/node/table";
+import { Resource } from "sst";
 import handler from "@notes/core/handler";
-import dynamoDb from "@notes/core/dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { GetCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+
+const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const main = handler(async (event) => {
   const params = {
-    TableName: Table.Notes.tableName,
+    TableName: Resource.Notes.name,
     // 'Key' defines the partition key and sort key of
     // the item to be retrieved
     Key: {
@@ -13,7 +16,7 @@ export const main = handler(async (event) => {
     },
   };
 
-  const result = await dynamoDb.get(params);
+  const result = await dynamoDb.send(new GetCommand(params));
   if (!result.Item) {
     throw new Error("Item not found.");
   }

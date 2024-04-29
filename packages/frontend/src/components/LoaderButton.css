@@ -4,7 +4,7 @@
 
 .LoaderButton .spinning {
   margin-right: 7px;
-  top: 2px;
+  margin-bottom: 1px;
   animation: spin 1s infinite linear;
 }
 

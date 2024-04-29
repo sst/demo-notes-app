@@ -1,12 +1,15 @@
-import { Table } from "sst/node/table";
+import { Resource } from "sst";
 import handler from "@notes/core/handler";
-import dynamoDb from "@notes/core/dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { UpdateCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+
+const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const main = handler(async (event) => {
   const data = JSON.parse(event.body || "{}");
 
   const params = {
-    TableName: Table.Notes.tableName,
+    TableName: Resource.Notes.name,
     Key: {
       // The attributes of the item to be created
       userId: event.requestContext.authorizer?.iam.cognitoIdentity.identityId,
@@ -19,13 +22,9 @@ export const main = handler(async (event) => {
       ":attachment": data.attachment || null,
       ":content": data.content || null,
     },
-    // 'ReturnValues' specifies if and how to return the item's attributes,
-    // where ALL_NEW returns all attributes of the item after the update; you
-    // can inspect 'result' below to see how it works with different settings
-    ReturnValues: "ALL_NEW",
   };
 
-  await dynamoDb.update(params);
+  await dynamoDb.send(new UpdateCommand(params));
 
   return JSON.stringify({ status: true });
 });

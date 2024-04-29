@@ -1,10 +1,13 @@
-import { Table } from "sst/node/table";
+import { Resource } from "sst";
 import handler from "@notes/core/handler";
-import dynamoDb from "@notes/core/dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { QueryCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+
+const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const main = handler(async (event) => {
   const params = {
-    TableName: Table.Notes.tableName,
+    TableName: Resource.Notes.name,
     // 'KeyConditionExpression' defines the condition for the query
     // - 'userId = :userId': only return items with matching 'userId'
     //   partition key
@@ -17,7 +20,7 @@ export const main = handler(async (event) => {
     },
   };
 
-  const result = await dynamoDb.query(params);
+  const result = await dynamoDb.send(new QueryCommand(params));
 
   // Return the matching list of items in response body
   return JSON.stringify(result.Items);

@@ -4,20 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "sst dev",
-    "build": "sst build",
-    "deploy": "sst deploy",
-    "remove": "sst remove",
-    "console": "sst console",
-    "test": "sst bind vitest run",
-    "typecheck": "tsc --noEmit"
+    "test": "vitest run"
   },
   "devDependencies": {
-    "@tsconfig/node16": "^16.1.1",
-    "aws-cdk-lib": "2.124.0",
-    "constructs": "10.2.69",
-    "sst": "^2.40.3",
-    "typescript": "^5.2.2",
     "vitest": "^0.34.3"
   },
   "workspaces": [

@@ -3,6 +3,7 @@ import { API } from "aws-amplify";
 import Form from "react-bootstrap/Form";
 import { NoteType } from "../types/note";
 import { s3Upload } from "../lib/awsLib";
+import Stack from "react-bootstrap/Stack";
 import { onError } from "../lib/errorLib";
 import { useNavigate } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
@@ -35,8 +36,7 @@ export default function NewNote() {
 
     if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
       alert(
-        `Please pick a file smaller than ${
-          config.MAX_ATTACHMENT_SIZE / 1000000
+        `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE / 1000000
         } MB.`
       );
       return;
@@ -71,15 +71,17 @@ export default function NewNote() {
           <Form.Label>Attachment</Form.Label>
           <Form.Control onChange={handleFileChange} type="file" />
         </Form.Group>
-        <LoaderButton
-          size="lg"
-          type="submit"
-          variant="primary"
-          isLoading={isLoading}
-          disabled={!validateForm()}
-        >
-          Create
-        </LoaderButton>
+        <Stack>
+          <LoaderButton
+            size="lg"
+            type="submit"
+            variant="primary"
+            isLoading={true}
+            disabled={!validateForm()}
+          >
+            Create
+          </LoaderButton>
+        </Stack>
       </Form>
     </div>
   );

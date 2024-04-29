@@ -1,21 +1,20 @@
-import { SSTConfig } from "sst";
-import { ApiStack } from "./stacks/ApiStack";
-import { AuthStack } from "./stacks/AuthStack";
-import { StorageStack } from "./stacks/StorageStack";
-import { FrontendStack } from "./stacks/FrontendStack";
+/// <reference path="./.sst/platform/config.d.ts" />
 
-export default {
-  config(_input) {
+export default $config({
+  app(input) {
     return {
-      name: "notes",
-      region: "us-east-1",
+      name: "ion-notes",
+      removal: input?.stage === "production" ? "retain" : "remove",
+      home: "aws",
     };
   },
-  stacks(app) {
-    app
-      .stack(StorageStack)
-      .stack(ApiStack)
-      .stack(AuthStack)
-      .stack(FrontendStack);
+  async run() {
+    const infra = await import("./infra");
+
+    return {
+      UserPool: infra.userPool.id,
+      IdentityPool: infra.identityPool.id,
+      UserPoolClient: infra.userPoolClient.id,
+    };
   },
-} satisfies SSTConfig;
+});
