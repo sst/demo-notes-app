@@ -38,7 +38,7 @@ $ npm install
 This project uses a secret that we are not checking in to the repo. Make sure to [create one before deploying](https://sst.dev/chapters/handling-secrets-in-sst.html).
 
 ```bash
-$ sst secret set STRIPE_SECRET_KEY <YOUR STRIPE SECRET TEST KEY>
+$ sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY>
 ```
 
 #### Developing Locally
@@ -69,7 +69,7 @@ $ sst deploy --stage production
 Make sure to set your secret for prod as well.
 
 ```bash
-$ sst secret set STRIPE_SECRET_KEY <YOUR STRIPE SECRET TEST KEY> --stage production
+$ sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY> --stage production
 ```
 
 ---
