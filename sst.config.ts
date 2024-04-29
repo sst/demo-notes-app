@@ -13,6 +13,7 @@ export default $config({
 
     return {
       UserPool: infra.userPool.id,
+      Region: aws.getRegionOutput().name,
       IdentityPool: infra.identityPool.id,
       UserPoolClient: infra.userPoolClient.id,
     };
