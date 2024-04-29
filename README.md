@@ -26,19 +26,19 @@ Before you get started:
 Clone this repo.
 
 ```bash
-$ git clone -b ion https://github.com/sst/demo-notes-app.git
+git clone -b ion https://github.com/sst/demo-notes-app.git
 ```
 
 Install dependencies.
 
 ```bash
-$ npm install
+npm install
 ```
 
 This project uses a secret that we are not checking in to the repo. Make sure to [create one before deploying](https://sst.dev/chapters/handling-secrets-in-sst.html).
 
 ```bash
-$ sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY>
+sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY>
 ```
 
 #### Developing Locally
@@ -46,8 +46,8 @@ $ sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY>
 Start the React local dev environment from the `packges/frontend/` dir.
 
 ```bash
-$ cd pacakges/frontend/
-$ npm run dev
+cd pacakges/frontend/
+npm run dev
 ```
 
 #### Running Tests
@@ -55,7 +55,7 @@ $ npm run dev
 From the project root.
 
 ```bash
-$ npm test
+npm test
 ```
 
 #### Deploying to Prod
@@ -63,13 +63,13 @@ $ npm test
 Run this in the project root to deploy it to prod.
 
 ```bash
-$ sst deploy --stage production
+sst deploy --stage production
 ```
 
 Make sure to set your secret for prod as well.
 
 ```bash
-$ sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY> --stage production
+sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY> --stage production
 ```
 
 ---
