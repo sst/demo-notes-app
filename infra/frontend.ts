@@ -10,7 +10,8 @@ export const web = new sst.aws.StaticSite("Web", {
     output: "dist",
     command: "npm run build",
   },
-  domain: $app.stage === "prod" ? "demo.sst.dev" : undefined,
+  // NOTE: Disabling custom domains for now
+  // domain: $app.stage === "production" ? "demo.sst.dev" : undefined,
   environment: {
     VITE_REGION: region,
     VITE_API_URL: api.url,

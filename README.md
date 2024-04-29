@@ -8,44 +8,46 @@ We create a note taking app from scratch — [**demo.sst.dev**](https://demo.sst
 
 We use React.js, AWS Lambda, API Gateway, DynamoDB, and Cognito. This repo is a full-stack serverless app built with [SST](https://github.com/sst/sst).
 
-- The `stacks/` directory defines our AWS infrastructure using AWS CDK.
+- The `infra/` directory defines our AWS infrastructure.
 - The `packages/functions` directory contains the Lambda functions that power the CRUD API.
 - The `packages/frontend` directory contains the React app.
 
 It's a single-page React app powered by a serverless CRUD API. We also cover how add user authentication, handle file uploads, and process credit card payments with Stripe.
+
+### Prerequisites
+
+Before you get started:
+
+1. [Configure your AWS credentials](https://docs.sst.dev/advanced/iam-credentials#loading-from-a-file)
+2. [Install the SST CLI](https://ion.sst.dev/docs/reference/cli/)
 
 ### Usage
 
 Clone this repo.
 
 ```bash
-$ git clone https://github.com/sst/demo-notes-app
+$ git clone -b ion https://github.com/sst/demo-notes-app.git
 ```
 
 Install dependencies.
 
 ```bash
-$ pnpm install
+$ npm install
 ```
 
 This project uses a secret that we are not checking in to the repo. Make sure to [create one before deploying](https://sst.dev/chapters/handling-secrets-in-sst.html).
 
 ```bash
-$ pnpm sst secrets set STRIPE_SECRET_KEY <YOUR STRIPE SECRET TEST KEY>
+$ sst secret set STRIPE_SECRET_KEY <YOUR STRIPE SECRET TEST KEY>
 ```
 
 #### Developing Locally
 
-Start the [Live Lambda Dev Environment](https://docs.sst.dev/live-lambda-development).
-
-```bash
-$ pnpm sst dev
-```
-
 Start the React local dev environment from the `packges/frontend/` dir.
 
 ```bash
-$ pnpm run dev
+$ cd pacakges/frontend/
+$ npm run dev
 ```
 
 #### Running Tests
@@ -53,7 +55,7 @@ $ pnpm run dev
 From the project root.
 
 ```bash
-$ pnpm test
+$ npm test
 ```
 
 #### Deploying to Prod
@@ -61,7 +63,13 @@ $ pnpm test
 Run this in the project root to deploy it to prod.
 
 ```bash
-$ pnpm sst deploy --stage prod
+$ sst deploy --stage production
+```
+
+Make sure to set your secret for prod as well.
+
+```bash
+$ sst secret set STRIPE_SECRET_KEY <YOUR STRIPE SECRET TEST KEY> --stage production
 ```
 
 ---
