@@ -7,8 +7,8 @@ const region = aws.getRegionOutput().name;
 export const web = new sst.aws.StaticSite("Web", {
   path: "packages/frontend",
   build: {
+    output: "dist",
     command: "npm run build",
-    output: "packages/frontend/dist",
   },
   domain: $app.stage === "prod" ? "demo.sst.dev" : undefined,
   environment: {

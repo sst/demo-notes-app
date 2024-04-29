@@ -14,8 +14,10 @@
     "vitest": "^0.34.3"
   },
   "dependencies": {
-    "aws-sdk": "^2.1446.0",
-    "stripe": "^13.3.0",
+    "@aws-sdk/client-dynamodb": "^3.565.0",
+    "@aws-sdk/lib-dynamodb": "^3.565.0",
+    "aws-sdk": "^2.1609.0",
+    "stripe": "^13.11.0",
     "uuid": "^9.0.0"
   }
 }

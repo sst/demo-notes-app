@@ -76,7 +76,7 @@ export default function NewNote() {
             size="lg"
             type="submit"
             variant="primary"
-            isLoading={true}
+            isLoading={isLoading}
             disabled={!validateForm()}
           >
             Create
