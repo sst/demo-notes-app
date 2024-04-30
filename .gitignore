@@ -15,3 +15,5 @@ node_modules
 
 # editor files
 .vim
+
+.env
