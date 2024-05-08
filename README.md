@@ -43,7 +43,7 @@ sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY>
 
 #### Developing Locally
 
-Start the React local dev environment from the `packges/frontend/` dir.
+Start the React local dev environment from the `packages/frontend/` dir.
 
 ```bash
 cd packages/frontend/
