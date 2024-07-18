@@ -9,6 +9,7 @@ export default $config({
     };
   },
   async run() {
+    //TODO
     await import("./infra/api");
     await import("./infra/storage");
     await import("./infra/frontend");
