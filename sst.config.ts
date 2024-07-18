@@ -9,13 +9,16 @@ export default $config({
     };
   },
   async run() {
-    const infra = await import("./infra");
+    await import("./infra/api");
+    await import("./infra/storage");
+    await import("./infra/frontend");
+    const auth = await import("./infra/auth");
 
     return {
-      UserPool: infra.userPool.id,
+      UserPool: auth.userPool.id,
       Region: aws.getRegionOutput().name,
-      IdentityPool: infra.identityPool.id,
-      UserPoolClient: infra.userPoolClient.id,
+      IdentityPool: auth.identityPool.id,
+      UserPoolClient: auth.userPoolClient.id,
     };
   },
 });
