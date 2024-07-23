@@ -1,8 +1,8 @@
 {
-  "name": "@monorepo-template/functions",
+  "name": "@demo-notes-app/functions",
   "version": "0.0.0",
   "dependencies": {
-    "@monorepo-template/core": "*",
+    "@demo-notes-app/core": "*",
     "sst": "*"
   },
   "devDependencies": {

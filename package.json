@@ -1,5 +1,5 @@
 {
-  "name": "monorepo-template",
+  "name": "demo-notes-app",
   "version": "0.0.0",
   "workspaces": [
     "packages/*"

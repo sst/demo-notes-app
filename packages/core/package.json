@@ -1,5 +1,5 @@
 {
-  "name": "@monorepo-template/core",
+  "name": "@demo-notes-app/core",
   "version": "0.0.0",
   "scripts": {
     "test": "sst shell vitest"
