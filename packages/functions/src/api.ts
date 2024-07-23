@@ -1,6 +1,6 @@
 import { Resource } from "sst";
 import { Handler } from "aws-lambda";
-import { Example } from "@demo-notes-app/core/example";
+import { Example } from "@notes/core/example";
 
 export const handler: Handler = async (_event) => {
   return {

@@ -1,4 +1,4 @@
-# SST Demo Notes App [![Seed Status](https://api.seed.run/serverless-stack/demo-notes-app/stages/prod/build_badge)](https://console.seed.run/serverless-stack/demo-notes-app)
+# SST Demo Notes App [![Seed Status](https://api.seed.run/serverless-stack/notes/stages/prod/build_badge)](https://console.seed.run/serverless-stack/notes)
 
 The [SST Guide](https://sst.dev/guide) is a comprehensive open source tutorial for building and deploying full-stack apps using serverless and React on AWS.
 
@@ -26,7 +26,7 @@ Before you get started:
 Clone this repo.
 
 ```bash
-git clone -b ion https://github.com/sst/demo-notes-app.git
+git clone -b ion https://github.com/sst/notes.git
 ```
 
 Install dependencies.
