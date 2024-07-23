@@ -3,22 +3,17 @@
 export default $config({
   app(input) {
     return {
-      name: "ion-notes",
+      name: "monorepo-template",
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
     };
   },
   async run() {
-    await import("./infra/api");
     await import("./infra/storage");
-    await import("./infra/frontend");
-    const auth = await import("./infra/auth");
+    const api = await import("./infra/api");
 
     return {
-      UserPool: auth.userPool.id,
-      Region: aws.getRegionOutput().name,
-      IdentityPool: auth.identityPool.id,
-      UserPoolClient: auth.userPoolClient.id,
+      api: api.myApi.url,
     };
   },
 });

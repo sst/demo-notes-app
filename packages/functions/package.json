@@ -1,23 +1,11 @@
 {
-  "name": "@notes/functions",
+  "name": "@monorepo-template/functions",
   "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "test": "sst shell vitest",
-    "typecheck": "tsc -noEmit"
+  "dependencies": {
+    "@monorepo-template/core": "*",
+    "sst": "*"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.119",
-    "@types/node": "^20.5.7",
-    "@types/uuid": "^9.0.2",
-    "sst": "^3.0.1",
-    "vitest": "^0.34.3"
-  },
-  "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.565.0",
-    "@aws-sdk/lib-dynamodb": "^3.565.0",
-    "aws-sdk": "^2.1609.0",
-    "stripe": "^13.11.0",
-    "uuid": "^9.0.0"
+    "@types/aws-lambda": "^8.10.137"
   }
 }

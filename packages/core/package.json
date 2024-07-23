@@ -1,17 +1,19 @@
 {
-  "name": "@notes/core",
+  "name": "@monorepo-template/core",
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "test": "sst shell vitest",
-    "typecheck": "tsc -noEmit"
+    "test": "sst shell vitest"
   },
-  "devDependencies": {
-    "@types/aws-lambda": "^8.10.119",
-    "@types/node": "^20.5.7",
-    "sst": "^3.0.1",
-    "vitest": "^0.34.3"
+  "exports": {
+    "./*": [
+      "./src/*/index.ts",
+      "./src/*.ts"
+    ]
   },
   "dependencies": {
+    "sst": "*"
+  },
+  "devDependencies": {
+    "vitest": "^2.0.3"
   }
 }
