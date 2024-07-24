@@ -11,7 +11,6 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.141",
-    "@types/uuid": "^10.0.0",
-    "add": "^2.0.6"
+    "@types/uuid": "^10.0.0"
   }
 }

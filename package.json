@@ -10,6 +10,6 @@
     "typescript": "5.3.3"
   },
   "dependencies": {
-    "sst": "^0.1.20"
+    "sst": "ion"
   }
 }
