@@ -4,14 +4,14 @@ export default $config({
   app(input) {
     return {
       name: "notes",
-      removal: input?.stage === "production" ? "retain" : "remove",
+      removal: "remove",
       home: "aws",
     };
   },
   async run() {
-    await import("./infra/storage");
     await import("./infra/api");
     await import("./infra/web");
+    await import("./infra/storage");
     const auth = await import("./infra/auth");
 
     return {
