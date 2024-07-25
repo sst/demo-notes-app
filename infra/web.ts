@@ -10,6 +10,7 @@ export const frontend = new sst.aws.StaticSite("Frontend", {
     output: "dist",
     command: "npm run build",
   },
+  domain: $app.stage === "production" ? "demo.sst.dev" : undefined,
   environment: {
     VITE_REGION: region,
     VITE_API_URL: api.url,
