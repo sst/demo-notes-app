@@ -1,4 +1,4 @@
-# SST Demo Notes App [![Seed Status](https://api.seed.run/serverless-stack/notes/stages/prod/build_badge)](https://console.seed.run/serverless-stack/notes)
+# SST Demo Notes App
 
 The [SST Guide](https://sst.dev/guide) is a comprehensive open source tutorial for building and deploying full-stack apps using serverless and React on AWS.
 
@@ -6,7 +6,7 @@ We create a note taking app from scratch — [**demo.sst.dev**](https://demo.sst
 
 ![Demo App](screenshot.png)
 
-We use React.js, AWS Lambda, API Gateway, DynamoDB, and Cognito. This repo is a full-stack serverless app built with [SST](https://github.com/sst/sst).
+We use React.js, AWS Lambda, API Gateway, DynamoDB, and Cognito. This repo is a full-stack serverless app built with SST.
 
 - The `infra/` directory defines our AWS infrastructure.
 - The `packages/functions` directory contains the Lambda functions that power the CRUD API.
@@ -26,7 +26,7 @@ Before you get started:
 Clone this repo.
 
 ```bash
-git clone -b ion https://github.com/sst/notes.git
+git clone https://github.com/sst/notes.git
 ```
 
 Install dependencies.
@@ -38,38 +38,31 @@ npm install
 This project uses a secret that we are not checking in to the repo. Make sure to [create one before deploying](https://sst.dev/chapters/handling-secrets-in-sst.html).
 
 ```bash
-sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY>
+sst secret set StripeSecretKey <YOUR_STRIPE_SECRET_TEST_KEY>
 ```
 
 #### Developing Locally
 
-Start the React local dev environment from the `packages/frontend/` dir.
+From your project root run:
 
 ```bash
-cd packages/frontend/
-npm run dev
+npx sst dev
 ```
 
-#### Running Tests
-
-From the project root.
-
-```bash
-npm test
-```
+This will start your frontend and run your functions [Live](https://ion.sst.dev/docs/live/).
 
 #### Deploying to Prod
 
 Run this in the project root to deploy it to prod.
 
 ```bash
-sst deploy --stage production
+npx sst deploy --stage production
 ```
 
 Make sure to set your secret for prod as well.
 
 ```bash
-sst secret set StripeSecretKey <YOUR STRIPE SECRET TEST KEY> --stage production
+sst secret set StripeSecretKey <YOUR_STRIPE_SECRET_TEST_KEY> --stage production
 ```
 
 ---
