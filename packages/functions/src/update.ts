@@ -11,7 +11,7 @@ export const main = Util.handler(async (event) => {
   const params = {
     TableName: Resource.Notes.name,
     Key: {
-      // The attributes of the item to be created
+      // The attributes of the item to be updated
       userId: event.requestContext.authorizer?.iam.cognitoIdentity.identityId,
       noteId: event?.pathParameters?.id, // The id of the note from the path
     },
