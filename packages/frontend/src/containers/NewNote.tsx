@@ -1,10 +1,9 @@
 import React, { useRef, useState } from "react";
-import { API } from "aws-amplify";
 import Form from "react-bootstrap/Form";
 import { NoteType } from "../types/note";
-import { s3Upload } from "../lib/awsLib";
 import Stack from "react-bootstrap/Stack";
 import { onError } from "../lib/errorLib";
+import { useAuthFetch } from "../lib/hooksLib";
 import { useNavigate } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
 import config from "../config";
@@ -12,6 +11,7 @@ import "./NewNote.css";
 
 export default function NewNote() {
   const file = useRef<null | File>(null);
+  const authFetch = useAuthFetch();
   const nav = useNavigate();
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -26,9 +26,32 @@ export default function NewNote() {
   }
 
   function createNote(note: NoteType) {
-    return API.post("notes", "/notes", {
-      body: note,
+    return authFetch(`${config.API_URL}notes`, {
+      method: "POST",
+      body: JSON.stringify(note),
     });
+  }
+
+  function getPresignedUpload(fileName: string, fileType: string) {
+    return authFetch(`${config.API_URL}presign`, {
+      method: "POST",
+      body: JSON.stringify({ fileName, fileType }),
+    });
+  }
+
+  async function handleUpload(file: File) {
+    const res = await getPresignedUpload(file.name, file.type);
+
+    await fetch(res.url, {
+      body: file,
+      method: "PUT",
+      headers: {
+        "Content-Type": file.type,
+        "Content-Disposition": `attachment; filename="${file.name}"`,
+      },
+    });
+
+    return res.path;
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -46,7 +69,7 @@ export default function NewNote() {
 
     try {
       const attachment = file.current
-        ? await s3Upload(file.current)
+        ? await handleUpload(file.current)
         : undefined;
 
       await createNote({ content, attachment });

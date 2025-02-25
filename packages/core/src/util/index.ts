@@ -1,32 +1,35 @@
-import { Context, APIGatewayProxyEvent } from "aws-lambda";
+import { Resource } from "sst";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
 export module Util {
-  export function handler(
-    lambda: (evt: APIGatewayProxyEvent, context: Context) => Promise<string>
-  ) {
-    return async function(event: APIGatewayProxyEvent, context: Context) {
-      let body: string, statusCode: number;
 
-      try {
-        // Run the Lambda
-        body = await lambda(event, context);
-        statusCode = 200;
-      } catch (error) {
-        statusCode = 500;
-        body = JSON.stringify({
-          error: error instanceof Error ? error.message : String(error),
-        });
-      }
+  export async function presignDownload(fileName: string) {
+    const command = new GetObjectCommand({
+      Key: fileName,
+      Bucket: Resource.Uploads.name,
+    });
 
-      // Return HTTP response
-      return {
-        body,
-        statusCode,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-      };
+    return {
+      url: await getSignedUrl(new S3Client({}), command)
     };
   }
+
+  export async function presignUpload(
+    userId: string, fileName: string, fileType: string
+  ) {
+    const path = `${userId}/${Date.now()}-${fileName}`;
+
+    const command = new PutObjectCommand({
+      Key: path,
+      ContentType: fileType,
+      Bucket: Resource.Uploads.name,
+    });
+
+    return {
+      path,
+      url: await getSignedUrl(new S3Client({}), command),
+    };
+  }
+
 }

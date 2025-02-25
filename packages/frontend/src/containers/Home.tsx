@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
-import { API } from "aws-amplify";
+import config from "../config";
+import { useAuth } from "../AuthContext";
 import { NoteType } from "../types/note";
 import { onError } from "../lib/errorLib";
+import { useAuthFetch } from "../lib/hooksLib";
 import { BsPencilSquare } from "react-icons/bs";
 import ListGroup from "react-bootstrap/ListGroup";
 import { LinkContainer } from "react-router-bootstrap";
-import { useAppContext } from "../lib/contextLib";
 import "./Home.css";
 
 export default function Home() {
+  const auth = useAuth();
+  const authFetch = useAuthFetch();
   const [notes, setNotes] = useState<Array<NoteType>>([]);
-  const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function onLoad() {
-      if (!isAuthenticated) {
+      if (!auth.loggedIn) {
         return;
       }
 
@@ -30,10 +32,10 @@ export default function Home() {
     }
 
     onLoad();
-  }, [isAuthenticated]);
+  }, [auth.loggedIn]);
 
   function loadNotes() {
-    return API.get("notes", "/notes", {});
+    return authFetch(`${config.API_URL}notes`);
   }
 
   function formatDate(str: undefined | string) {
@@ -84,7 +86,7 @@ export default function Home() {
 
   return (
     <div className="Home">
-      {isAuthenticated ? renderNotes() : renderLander()}
+      {auth.loggedIn ? renderNotes() : renderLander()}
     </div>
   );
 }

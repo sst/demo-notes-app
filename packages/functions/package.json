@@ -3,11 +3,15 @@
   "version": "0.0.0",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.616.0",
+    "@aws-sdk/client-sesv2": "^3.734.0",
     "@aws-sdk/lib-dynamodb": "^3.616.0",
     "@notes/core": "*",
+    "@openauthjs/openauth": "^0.3.6",
+    "hono": "^4.6.19",
     "sst": "*",
     "stripe": "^16.4.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "valibot": "^1.0.0-beta.14"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.141",

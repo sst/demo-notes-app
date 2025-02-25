@@ -2,16 +2,16 @@ import React, { useRef, useState, useEffect } from "react";
 import config from "../config";
 import Form from "react-bootstrap/Form";
 import { NoteType } from "../types/note";
-import { s3Upload } from "../lib/awsLib";
 import { onError } from "../lib/errorLib";
 import Stack from "react-bootstrap/Stack";
-import { API, Storage } from "aws-amplify";
+import { useAuthFetch } from "../lib/hooksLib";
 import LoaderButton from "../components/LoaderButton";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Notes.css";
 
 export default function Notes() {
   const file = useRef<null | File>(null);
+  const authFetch = useAuthFetch();
   const { id } = useParams();
   const nav = useNavigate();
   const [note, setNote] = useState<null | NoteType>(null);
@@ -21,7 +21,7 @@ export default function Notes() {
 
   useEffect(() => {
     function loadNote() {
-      return API.get("notes", `/notes/${id}`, {});
+      return authFetch(`${config.API_URL}notes/${id}`);
     }
 
     async function onLoad() {
@@ -30,7 +30,8 @@ export default function Notes() {
         const { content, attachment } = note;
 
         if (attachment) {
-          note.attachmentURL = await Storage.vault.get(attachment);
+          const { url } = await getPresignedDownload(attachment);
+          note.attachmentURL = url;
         }
 
         setContent(content);
@@ -48,7 +49,7 @@ export default function Notes() {
   }
 
   function formatFilename(str: string) {
-    return str.replace(/^\w+-/, "");
+    return str.split("/")[1].replace(/^\w+-/, "");
   }
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -57,9 +58,36 @@ export default function Notes() {
   }
 
   function saveNote(note: NoteType) {
-    return API.put("notes", `/notes/${id}`, {
-      body: note,
+    return authFetch(`${config.API_URL}notes/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(note),
     });
+  }
+
+  function getPresignedDownload(path: string) {
+    return authFetch(`${config.API_URL}presign?path=${encodeURIComponent(path)}`);
+  }
+
+  function getPresignedUpload(fileName: string, fileType: string) {
+    return authFetch(`${config.API_URL}presign`, {
+      method: "POST",
+      body: JSON.stringify({ fileName, fileType }),
+    });
+  }
+
+  async function handleUpload(file: File) {
+    const res = await getPresignedUpload(file.name, file.type);
+
+    await fetch(res.url, {
+      body: file,
+      method: "PUT",
+      headers: {
+        "Content-Type": file.type,
+        "Content-Disposition": `attachment; filename="${file.name}"`,
+      },
+    });
+
+    return res.path;
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -69,8 +97,7 @@ export default function Notes() {
 
     if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
       alert(
-        `Please pick a file smaller than ${
-          config.MAX_ATTACHMENT_SIZE / 1000000
+        `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE / 1000000
         } MB.`
       );
       return;
@@ -80,15 +107,12 @@ export default function Notes() {
 
     try {
       if (file.current) {
-        attachment = await s3Upload(file.current);
+        attachment = await handleUpload(file.current);
       } else if (note && note.attachment) {
         attachment = note.attachment;
       }
 
-      await saveNote({
-        content: content,
-        attachment: attachment,
-      });
+      await saveNote({ content: content, attachment: attachment });
       nav("/");
     } catch (e) {
       onError(e);
@@ -97,7 +121,9 @@ export default function Notes() {
   }
 
   function deleteNote() {
-    return API.del("notes", `/notes/${id}`, {});
+    return authFetch(`${config.API_URL}notes/${id}`, {
+      method: "DELETE",
+    });
   }
 
   async function handleDelete(event: React.FormEvent<HTMLModElement>) {
