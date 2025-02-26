@@ -1,13 +1,10 @@
 import React, { useRef, useState } from "react";
-import Form from "react-bootstrap/Form";
 import { NoteType } from "../types/note";
-import Stack from "react-bootstrap/Stack";
 import { onError } from "../lib/errorLib";
-import { useAuthFetch } from "../lib/hooksLib";
+import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
-import LoaderButton from "../components/LoaderButton";
+import { useAuthFetch } from "../lib/hooksLib";
 import config from "../config";
-import "./NewNote.css";
 
 export default function NewNote() {
   const file = useRef<null | File>(null);
@@ -81,31 +78,36 @@ export default function NewNote() {
   }
 
   return (
-    <div className="NewNote">
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="content">
-          <Form.Control
-            value={content}
-            as="textarea"
-            onChange={(e) => setContent(e.target.value)}
+    <div className="container mx-auto px-4">
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto flex flex-col gap-4">
+        <textarea
+          id="content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          className="w-full h-72 p-3 border border-gray-300 rounded text-2xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+        />
+        <div className="flex flex-col gap-1">
+          <label htmlFor="file" className="block font-medium text-gray-700">
+            Attachment
+          </label>
+          <input
+            id="file"
+            type="file"
+            onChange={handleFileChange}
+            className="w-full text-gray-700 border border-gray-300 overflow-hidden rounded focus:outline-none focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:border-r file:border-gray-300 file:text-gray-700 file:bg-gray-100 file:cursor-pointer hover:file:bg-gray-200"
           />
-        </Form.Group>
-        <Form.Group className="mt-2" controlId="file">
-          <Form.Label>Attachment</Form.Label>
-          <Form.Control onChange={handleFileChange} type="file" />
-        </Form.Group>
-        <Stack>
-          <LoaderButton
-            size="lg"
+        </div>
+        <div className="flex flex-col gap-3">
+          <Button
             type="submit"
             variant="primary"
-            isLoading={isLoading}
+            loading={isLoading}
             disabled={!validateForm()}
           >
             Create
-          </LoaderButton>
-        </Stack>
-      </Form>
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

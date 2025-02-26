@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.616.0",
+    "@aws-sdk/client-s3": "^3.750.0",
     "@aws-sdk/client-sesv2": "^3.734.0",
     "@aws-sdk/lib-dynamodb": "^3.616.0",
+    "@aws-sdk/s3-request-presigner": "^3.750.0",
     "@notes/core": "*",
     "@openauthjs/openauth": "^0.3.6",
     "hono": "^4.6.19",

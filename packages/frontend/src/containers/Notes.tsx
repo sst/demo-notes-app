@@ -1,13 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import config from "../config";
-import Form from "react-bootstrap/Form";
 import { NoteType } from "../types/note";
 import { onError } from "../lib/errorLib";
-import Stack from "react-bootstrap/Stack";
+import Button from "../components/Button";
 import { useAuthFetch } from "../lib/hooksLib";
-import LoaderButton from "../components/LoaderButton";
 import { useParams, useNavigate } from "react-router-dom";
-import "./Notes.css";
 
 export default function Notes() {
   const file = useRef<null | File>(null);
@@ -126,7 +123,7 @@ export default function Notes() {
     });
   }
 
-  async function handleDelete(event: React.FormEvent<HTMLModElement>) {
+  async function handleDelete(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
 
     const confirmed = window.confirm(
@@ -149,53 +146,55 @@ export default function Notes() {
   }
 
   return (
-    <div className="Notes">
+    <div className="container mx-auto px-4">
       {note && (
-        <Form onSubmit={handleSubmit}>
-          <Stack gap={3}>
-            <Form.Group controlId="content">
-              <Form.Control
-                size="lg"
-                as="textarea"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mt-2" controlId="file">
-              <Form.Label>Attachment</Form.Label>
-              {note.attachment && (
-                <p>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={note.attachmentURL}
-                  >
-                    {formatFilename(note.attachment)}
-                  </a>
-                </p>
-              )}
-              <Form.Control onChange={handleFileChange} type="file" />
-            </Form.Group>
-            <Stack gap={1}>
-              <LoaderButton
-                size="lg"
-                type="submit"
-                isLoading={isLoading}
-                disabled={!validateForm()}
-              >
-                Save
-              </LoaderButton>
-              <LoaderButton
-                size="lg"
-                variant="danger"
-                onClick={handleDelete}
-                isLoading={isDeleting}
-              >
-                Delete
-              </LoaderButton>
-            </Stack>
-          </Stack>
-        </Form>
+        <form onSubmit={handleSubmit} className="max-w-2xl mx-auto flex flex-col gap-6">
+          <textarea
+            id="content"
+            className="w-full h-72 p-3 text-2xl border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <div className="flex flex-col gap-2">
+            <label htmlFor="file" className="block font-medium text-gray-700">
+              Attachment
+            </label>
+            {note.attachment && (
+              <p>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={note.attachmentURL}
+                  className="text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                  {formatFilename(note.attachment)}
+                </a>
+              </p>
+            )}
+            <input
+              id="file"
+              type="file"
+              onChange={handleFileChange}
+              className="w-full text-gray-700 border border-gray-300 overflow-hidden rounded focus:outline-none focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:border-r file:border-gray-300 file:text-gray-700 file:bg-gray-100 file:cursor-pointer hover:file:bg-gray-200"
+            />
+          </div>
+          <div className="flex flex-col gap-3">
+            <Button
+              type="submit"
+              loading={isLoading}
+              disabled={!validateForm()}
+            >
+              Save
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleDelete}
+              loading={isDeleting}
+            >
+              Delete
+            </Button>
+          </div>
+        </form>
       )}
     </div>
   );

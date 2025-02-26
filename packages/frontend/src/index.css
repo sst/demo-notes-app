@@ -1,22 +1,8 @@
-body {
-  margin: 0;
-  padding: 0;
-  color: #333;
-  font-size: 16px;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  font-family: "Open Sans", sans-serif;
-}
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=PT+Serif&display=swap");
+@import "tailwindcss";
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "PT Serif", serif;
-}
-
-select.form-control,
-textarea.form-control,
-input.form-control {
-  font-size: 1rem;
-}
-input[type="file"] {
-  width: 100%;
+@theme {
+  --font-sans: "Open Sans", sans-serif;
+  --font-serif: "PT Serif", serif;
 }

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Form from "react-bootstrap/Form";
-import Stack from "react-bootstrap/Stack";
 import { useFormFields } from "../lib/hooksLib";
-import LoaderButton from "../components/LoaderButton";
+import Button from "./Button";
 import { Token, StripeError } from "@stripe/stripe-js";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import "./BillingForm.css";
@@ -66,56 +64,84 @@ export function BillingForm({ isLoading, onSubmit }: BillingFormType) {
   }
 
   return (
-    <Form className="BillingForm" onSubmit={handleSubmitClick}>
-      <Form.Group controlId="storage">
-        <Form.Label>Storage</Form.Label>
-        <Form.Control
+    <form
+      onSubmit={handleSubmitClick}
+      className="max-w-2xl mx-auto flex flex-col gap-6"
+    >
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="storage"
+          className="block font-medium text-gray-700"
+        >
+          Storage
+        </label>
+        <input
+          id="storage"
           min="0"
-          size="lg"
           type="number"
           value={fields.storage}
           onChange={handleFieldChange}
           placeholder="Number of notes to store"
+          className="w-full p-3 text-lg border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
         />
-      </Form.Group>
-      <hr />
-      <Stack gap={3}>
-        <Form.Group controlId="name">
-          <Form.Label>Cardholder&apos;s name</Form.Label>
-          <Form.Control
-            size="lg"
+      </div>
+
+      <hr className="border-t border-gray-300" />
+
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="name"
+            className="block font-medium text-gray-700"
+          >
+            Cardholder's name
+          </label>
+          <input
+            id="name"
             type="text"
             value={fields.name}
             onChange={handleFieldChange}
             placeholder="Name on the card"
-          />
-        </Form.Group>
-        <div>
-          <Form.Label>Credit Card Info</Form.Label>
-          <CardElement
-            className="card-field"
-            onChange={(e) => setIsCardComplete(e.complete)}
-            options={{
-              style: {
-                base: {
-                  fontSize: "16px",
-                  fontWeight: "400",
-                  color: "#495057",
-                  fontFamily: "'Open Sans', sans-serif",
-                },
-              },
-            }}
+            className="w-full p-3 text-lg border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
           />
         </div>
-        <LoaderButton
-          size="lg"
-          type="submit"
-          isLoading={isLoading}
-          disabled={!validateForm()}
-        >
-          Purchase
-        </LoaderButton>
-      </Stack>
-    </Form>
+
+        <div className="flex flex-col gap-2">
+          <label className="block font-medium text-gray-700">
+            Credit Card Info
+          </label>
+          <div className="card-element-container">
+            <CardElement
+              className="p-4 w-full border border-gray-300 rounded bg-white"
+              onChange={(e) => setIsCardComplete(e.complete)}
+              options={{
+                style: {
+                  base: {
+                    fontSize: "18px",
+                    fontWeight: "400",
+                    color: "#000000",
+                    fontFamily: "'Open Sans', sans-serif",
+                    "::placeholder": {
+                      color: "#00000080",
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col">
+          <Button
+            type="submit"
+            variant="success"
+            loading={isLoading}
+            disabled={!validateForm()}
+          >
+            Purchase
+          </Button>
+        </div>
+      </div>
+    </form>
   );
 }

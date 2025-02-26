@@ -4,10 +4,8 @@ import { useAuth } from "../AuthContext";
 import { NoteType } from "../types/note";
 import { onError } from "../lib/errorLib";
 import { useAuthFetch } from "../lib/hooksLib";
+import { Link } from "react-router-dom";
 import { BsPencilSquare } from "react-icons/bs";
-import ListGroup from "react-bootstrap/ListGroup";
-import { LinkContainer } from "react-router-bootstrap";
-import "./Home.css";
 
 export default function Home() {
   const auth = useAuth();
@@ -44,48 +42,56 @@ export default function Home() {
 
   function renderNotesList(notes: NoteType[]) {
     return (
-      <>
-        <LinkContainer to="/notes/new">
-          <ListGroup.Item action className="py-3 text-nowrap text-truncate">
-            <BsPencilSquare size={17} />
-            <span className="ms-2 fw-bold">Create a new note</span>
-          </ListGroup.Item>
-        </LinkContainer>
-        {notes.map(({ noteId, content, createdAt }) => (
-          <LinkContainer key={noteId} to={`/notes/${noteId}`}>
-            <ListGroup.Item action className="text-nowrap text-truncate">
-              <span className="fw-bold">{content.trim().split("\n")[0]}</span>
-              <br />
-              <span className="text-muted">
-                Created: {formatDate(createdAt)}
-              </span>
-            </ListGroup.Item>
-          </LinkContainer>
+      <div className="flex flex-col">
+        <Link
+          to="/notes/new"
+          className={`p-4 flex items-center hover:bg-gray-100 ${notes.length > 0 ? 'border-b' : ''} border-gray-200`}
+        >
+          <BsPencilSquare size={17} />
+          <span className="ml-2 font-bold truncate">Create a new note</span>
+        </Link>
+        {notes.map(({ noteId, content, createdAt }, index) => (
+          <Link
+            key={noteId}
+            to={`/notes/${noteId}`}
+            className={`py-3 px-4 hover:bg-gray-100 truncate ${index < notes.length - 1 ? 'border-b' : ''} border-gray-200`}
+          >
+            <span className="font-bold block">
+              {content.trim().split("\n")[0]}
+            </span>
+            <span className="text-gray-500 text-sm">
+              Created: {formatDate(createdAt)}
+            </span>
+          </Link>
         ))}
-      </>
+      </div>
     );
   }
 
   function renderLander() {
     return (
-      <div className="lander">
-        <h1>Scratch</h1>
-        <p className="text-muted">A simple note taking app</p>
+      <div className="py-20 text-center flex flex-col gap-2">
+        <h1 className="text-4xl font-semibold">Scratch</h1>
+        <p className="text-gray-500">A simple note taking app</p>
       </div>
     );
   }
 
   function renderNotes() {
     return (
-      <div className="notes">
-        <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
-        <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+      <div className="flex flex-col gap-4">
+        <h2 className="pb-3 text-3xl font-serif font-medium border-b border-gray-200">Your Notes</h2>
+        {!isLoading &&
+          <div className="border border-gray-200 rounded-md overflow-hidden">
+            {renderNotesList(notes)}
+          </div>
+        }
       </div>
     );
   }
 
   return (
-    <div className="Home">
+    <div className="container mx-auto px-4">
       {auth.loggedIn ? renderNotes() : renderLander()}
     </div>
   );
