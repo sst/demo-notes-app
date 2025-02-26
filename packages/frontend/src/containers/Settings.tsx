@@ -7,7 +7,6 @@ import { BillingType } from "../types/billing";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { BillingForm, BillingFormType } from "../components/BillingForm";
-import "./Settings.css";
 
 const stripePromise = loadStripe(config.STRIPE_KEY);
 
@@ -49,7 +48,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="Settings">
+    <div>
       <Elements
         stripe={stripePromise}
         options={{

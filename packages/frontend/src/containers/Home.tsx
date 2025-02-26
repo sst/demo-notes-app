@@ -5,7 +5,7 @@ import { NoteType } from "../types/note";
 import { onError } from "../lib/errorLib";
 import { useAuthFetch } from "../lib/hooksLib";
 import { Link } from "react-router-dom";
-import { BsPencilSquare } from "react-icons/bs";
+import { HiOutlinePencilSquare } from "react-icons/hi2";
 
 export default function Home() {
   const auth = useAuth();
@@ -47,7 +47,7 @@ export default function Home() {
           to="/notes/new"
           className={`p-4 flex items-center hover:bg-gray-100 ${notes.length > 0 ? 'border-b' : ''} border-gray-200`}
         >
-          <BsPencilSquare size={17} />
+          <HiOutlinePencilSquare size={17} />
           <span className="ml-2 font-bold truncate">Create a new note</span>
         </Link>
         {notes.map(({ noteId, content, createdAt }, index) => (
@@ -91,7 +91,7 @@ export default function Home() {
   }
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto">
       {auth.loggedIn ? renderNotes() : renderLander()}
     </div>
   );

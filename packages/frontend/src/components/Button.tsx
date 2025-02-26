@@ -1,5 +1,5 @@
 import React, { ButtonHTMLAttributes } from "react";
-import { BsArrowRepeat } from "react-icons/bs";
+import { HiArrowPath } from "react-icons/hi2";
 
 type ButtonVariant = "primary" | "success" | "danger";
 
@@ -53,7 +53,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled || loading}
       {...rest}
     >
-      {loading && <BsArrowRepeat className="animate-spin mr-2" />}
+      {loading && <HiArrowPath className="animate-spin mr-2" />}
       {children}
     </button>
   );

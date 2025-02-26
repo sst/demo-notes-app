@@ -146,9 +146,9 @@ export default function Notes() {
   }
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto">
       {note && (
-        <form onSubmit={handleSubmit} className="max-w-2xl mx-auto flex flex-col gap-6">
+        <form onSubmit={handleSubmit} className="mx-auto flex flex-col gap-6">
           <textarea
             id="content"
             className="w-full h-72 p-3 text-2xl border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"

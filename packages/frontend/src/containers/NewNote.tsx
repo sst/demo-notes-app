@@ -78,8 +78,8 @@ export default function NewNote() {
   }
 
   return (
-    <div className="container mx-auto px-4">
-      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto flex flex-col gap-4">
+    <div className="container mx-auto">
+      <form onSubmit={handleSubmit} className="mx-auto flex flex-col gap-4">
         <textarea
           id="content"
           value={content}

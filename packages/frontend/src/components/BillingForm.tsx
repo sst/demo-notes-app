@@ -66,7 +66,7 @@ export function BillingForm({ isLoading, onSubmit }: BillingFormType) {
   return (
     <form
       onSubmit={handleSubmitClick}
-      className="max-w-2xl mx-auto flex flex-col gap-6"
+      className="mx-auto md:max-w-md md:pt-15 flex flex-col gap-6"
     >
       <div className="flex flex-col gap-2">
         <label
@@ -82,7 +82,7 @@ export function BillingForm({ isLoading, onSubmit }: BillingFormType) {
           value={fields.storage}
           onChange={handleFieldChange}
           placeholder="Number of notes to store"
-          className="w-full p-3 text-lg border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+          className="w-full px-3 py-2 text-lg border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
         />
       </div>
 
@@ -102,7 +102,7 @@ export function BillingForm({ isLoading, onSubmit }: BillingFormType) {
             value={fields.name}
             onChange={handleFieldChange}
             placeholder="Name on the card"
-            className="w-full p-3 text-lg border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-3 py-2 text-lg border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
           />
         </div>
 
@@ -112,7 +112,7 @@ export function BillingForm({ isLoading, onSubmit }: BillingFormType) {
           </label>
           <div className="card-element-container">
             <CardElement
-              className="p-4 w-full border border-gray-300 rounded bg-white"
+              className="px-4 py-3 w-full border border-gray-300 rounded bg-white"
               onChange={(e) => setIsCardComplete(e.complete)}
               options={{
                 style: {
