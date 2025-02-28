@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import config from "../config";
 import { onError } from "../lib/errorLib";
 import { useAuthFetch } from "../lib/hooksLib";
-import { useNavigate } from "react-router-dom";
 import { BillingType } from "../types/billing";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 import { BillingForm, BillingFormType } from "../components/BillingForm";
 
 const stripePromise = loadStripe(config.STRIPE_KEY);
@@ -52,12 +52,10 @@ export default function Settings() {
       <Elements
         stripe={stripePromise}
         options={{
-          fonts: [
-            {
-              cssSrc:
-                "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800",
-            },
-          ],
+          fonts: [{
+            cssSrc:
+              "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap",
+          }],
         }}
       >
         <BillingForm isLoading={isLoading} onSubmit={handleFormSubmit} />

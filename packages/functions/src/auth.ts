@@ -14,11 +14,11 @@ const MyTheme: Theme = {
   logo: `${process.env.FRONTEND_URL}/apple-touch-icon.png`,
   font: {
     scale: "1.14",
-    family: "Open Sans, sans-serif",
+    family: "Noto Sans, sans-serif",
   },
   radius: "lg",
-  primary: "#0D6EFD",
-  css: `@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');`
+  primary: "oklch(0.6 0.118 184.703995)",
+  css: `@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');`
 };
 
 const client = new SESv2Client();

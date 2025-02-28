@@ -1,8 +1,24 @@
 import { useState } from "react";
-import AppRoutes from "./Routes";
-import { useAuth } from "./AuthContext";
 import { Link } from "react-router-dom";
 import { HiBars3, HiXMark } from "react-icons/hi2";
+import AppRoutes from "./Routes";
+import { useAuth } from "./AuthContext";
+
+const containerCs =
+  `max-w-6xl mx-auto p-4 flex flex-col gap-6`;
+const navbarCs =
+  `bg-gray-100 p-2 rounded-lg flex flex-wrap items-center justify-between`;
+const navbarLogoCs =
+  `px-2 font-bold text-gray-600 text-xl`;
+const navbarToggleCs =
+  `md:hidden inline-flex items-center justify-center px-2 h-[40px] rounded-md
+  text-gray-500 hover:text-gray-600 hover:bg-gray-200`;
+const navbarContentCs = `w-full md:block md:w-auto`;
+const navbarLinksCs =
+  `flex flex-col md:flex-row md:ml-4 md:items-center md:justify-end`;
+const navbarButtonCs =
+  `flex items-center px-3 h-[40px] rounded-md text-gray-600 font-medium text-left
+  hover:text-gray-900 hover:bg-gray-200`;
 
 function App() {
   const auth = useAuth();
@@ -13,51 +29,30 @@ function App() {
   };
 
   return auth.loaded && (
-    <div className="max-w-6xl mx-auto p-4">
-      <nav className="bg-gray-100 mb-6 p-2 rounded-lg">
-        <div className="flex flex-wrap items-center justify-between">
-          <Link to="/" className="px-2 font-bold text-gray-600 text-xl">
-            Scratch
-          </Link>
+    <div className={containerCs}>
+      <nav className={navbarCs}>
+        <Link to="/" className={navbarLogoCs}>
+          Scratch
+        </Link>
 
-          <button
-            onClick={toggleNavbar}
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-200"
-          >
-            {isOpen ? <HiXMark size="20" /> : <HiBars3 size="20" />}
-          </button>
+        <button onClick={toggleNavbar} className={navbarToggleCs}>
+          {isOpen ? <HiXMark size="20" /> : <HiBars3 size="20" />}
+        </button>
 
-          <div
-            className={`${isOpen ? "block" : "hidden"} w-full md:block md:w-auto`}
-          >
-            <div className="flex flex-col mt-4 md:flex-row md:mt-0 md:ml-4 md:items-center md:justify-end">
-              {auth.loggedIn ? (
-                <>
-                  <Link
-                    to="/settings"
-                  >
-                    <button
-                      className="px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-200 font-medium cursor-pointer text-left"
-                    >
-                      Settings
-                    </button>
-                  </Link>
-                  <button
-                    onClick={auth.logout}
-                    className="px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-200 font-medium cursor-pointer text-left"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={auth.login}
-                  className="px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-200 font-medium cursor-pointer text-left"
-                >
-                  Login
+        <div className={`${isOpen ? "block" : "hidden"} ${navbarContentCs}`}>
+          <div className={navbarLinksCs}>
+            {auth.loggedIn ? (
+              <>
+                <Link to="/settings" className={navbarButtonCs}>
+                  Settings
+                </Link>
+                <button className={navbarButtonCs} onClick={auth.logout}>
+                  Logout
                 </button>
-              )}
-            </div>
+              </>
+            ) : (
+              <button className={navbarButtonCs} onClick={auth.login}>Login</button>
+            )}
           </div>
         </div>
       </nav>

@@ -1,5 +1,0 @@
-@import "tailwindcss";
-
-.card-element-container .StripeElement--focus {
-  @apply ring-1 ring-blue-500 border-blue-500;
-}

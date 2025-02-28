@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import config from "../config";
 import { NoteType } from "../types/note";
+import { formCs } from "../lib/stylesLib";
 import { onError } from "../lib/errorLib";
 import Button from "../components/Button";
-import { useNavigate } from "react-router-dom";
 import { useAuthFetch } from "../lib/hooksLib";
-import config from "../config";
 
 export default function NewNote() {
   const file = useRef<null | File>(null);
@@ -78,36 +79,32 @@ export default function NewNote() {
   }
 
   return (
-    <div className="container mx-auto">
-      <form onSubmit={handleSubmit} className="mx-auto flex flex-col gap-4">
-        <textarea
-          id="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="w-full h-72 p-3 border border-gray-300 rounded text-2xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+    <form onSubmit={handleSubmit} className={formCs.container}>
+      <textarea
+        id="content"
+        value={content}
+        className={formCs.textarea}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <div className={formCs.field}>
+        <label htmlFor="file" className={formCs.label}>Attachment</label>
+        <input
+          id="file"
+          type="file"
+          className={formCs.file}
+          onChange={handleFileChange}
         />
-        <div className="flex flex-col gap-1">
-          <label htmlFor="file" className="block font-medium text-gray-700">
-            Attachment
-          </label>
-          <input
-            id="file"
-            type="file"
-            onChange={handleFileChange}
-            className="w-full text-gray-700 border border-gray-300 overflow-hidden rounded focus:outline-none focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:border-r file:border-gray-300 file:text-gray-700 file:bg-gray-100 file:cursor-pointer hover:file:bg-gray-200"
-          />
-        </div>
-        <div className="flex flex-col gap-3">
-          <Button
-            type="submit"
-            variant="primary"
-            loading={isLoading}
-            disabled={!validateForm()}
-          >
-            Create
-          </Button>
-        </div>
-      </form>
-    </div>
+      </div>
+      <div className={formCs.controls}>
+        <Button
+          type="submit"
+          variant="success"
+          loading={isLoading}
+          disabled={!validateForm()}
+        >
+          Create
+        </Button>
+      </div>
+    </form>
   );
 }

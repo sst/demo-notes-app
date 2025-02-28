@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes } from "react";
 import { HiArrowPath } from "react-icons/hi2";
 
 type ButtonVariant = "primary" | "success" | "danger";
@@ -10,38 +10,46 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
+function Button({
   variant = "primary",
   className = "",
   disabled = false,
   loading = false,
   children,
   ...rest
-}) => {
-  const baseClasses = "inline-flex items-center justify-center font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors";
+}: ButtonProps) {
+  const baseClasses =
+    `inline-flex items-center justify-center font-medium rounded gap-2`;
 
-  const sizeClass = "py-2 px-5 text-lg";
+  const sizeClass = "py-3 px-5 text-lg";
 
   const variantBaseClasses = {
-    'primary': 'bg-blue-600 text-white focus:ring-blue-500 border border-blue-600',
-    'success': 'bg-green-600 text-white focus:ring-green-500 border border-green-600',
-    'danger': 'bg-red-600 text-white focus:ring-red-500 border border-red-600',
+    "primary": "bg-sky-600 text-white",
+    "success": "bg-teal-600 text-white",
+    "danger": "bg-rose-600 text-white",
   };
 
   const variantHoverClasses = {
-    'primary': 'hover:bg-blue-700',
-    'success': 'hover:bg-green-700',
-    'danger': 'hover:bg-red-700',
+    "primary": "hover:bg-sky-500",
+    "success": "hover:bg-teal-500",
+    "danger": "hover:bg-rose-500",
+  };
+
+  const variantActiveClasses = {
+    "primary": "active:bg-sky-700",
+    "success": "active:bg-teal-700",
+    "danger": "active:bg-rose-700",
   };
 
   const disabledClasses = disabled ? "opacity-60" : "";
 
-  const hoverClass = (!disabled && !loading) ? variantHoverClasses[variant] : '';
+  const hoverClass = (!disabled && !loading) ? variantHoverClasses[variant] : "";
 
   const buttonClasses = [
     baseClasses,
     sizeClass,
     variantBaseClasses[variant],
+    variantActiveClasses[variant],
     hoverClass,
     disabledClasses,
     className
@@ -53,10 +61,10 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled || loading}
       {...rest}
     >
-      {loading && <HiArrowPath className="animate-spin mr-2" />}
+      {loading && <HiArrowPath className="animate-spin" />}
       {children}
     </button>
   );
-};
+}
 
 export default Button;

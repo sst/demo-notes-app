@@ -1,11 +1,36 @@
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { HiOutlinePencilSquare } from "react-icons/hi2";
 import config from "../config";
 import { useAuth } from "../AuthContext";
 import { NoteType } from "../types/note";
 import { onError } from "../lib/errorLib";
 import { useAuthFetch } from "../lib/hooksLib";
-import { Link } from "react-router-dom";
-import { HiOutlinePencilSquare } from "react-icons/hi2";
+
+const landerCs =
+  `py-20 text-center flex flex-col gap-2`;
+const landerTitleCs =
+  `text-4xl font-semibold`;
+const landerDescCs =
+  `text-gray-500`;
+const notesCs =
+  `flex flex-col gap-4`;
+const notesTitleCs =
+  `pb-3 text-3xl font-serif font-medium border-b border-gray-200`;
+const listCs =
+  `border border-gray-200 rounded-md overflow-hidden`;
+const listItemCs =
+  `flex flex-col gap-1 py-3 px-4 border-gray-200 hover:bg-gray-100`;
+const listItemTitleCs =
+  `font-semibold truncate`;
+const listItemDescCs =
+  `text-gray-500 text-sm truncate`;
+const listNewItemCs =
+  `flex items-center gap-2 py-3 px-4 border-gray-200 hover:bg-gray-100`;
+const listNewItemIconCs =
+  `shrink-0`;
+const listNewItemTitleCs =
+  `font-semibold truncate`;
 
 export default function Home() {
   const auth = useAuth();
@@ -42,57 +67,47 @@ export default function Home() {
 
   function renderNotesList(notes: NoteType[]) {
     return (
-      <div className="flex flex-col">
+      <>
         <Link
           to="/notes/new"
-          className={`p-4 flex items-center hover:bg-gray-100 ${notes.length > 0 ? 'border-b' : ''} border-gray-200`}
+          className={`${listNewItemCs} ${notes.length > 0 ? 'border-b' : ''}`}
         >
-          <HiOutlinePencilSquare size={17} />
-          <span className="ml-2 font-bold truncate">Create a new note</span>
+          <HiOutlinePencilSquare className={listNewItemIconCs} size={17} />
+          <span className={listNewItemTitleCs}>Create a new note</span>
         </Link>
         {notes.map(({ noteId, content, createdAt }, index) => (
           <Link
             key={noteId}
             to={`/notes/${noteId}`}
-            className={`py-3 px-4 hover:bg-gray-100 truncate ${index < notes.length - 1 ? 'border-b' : ''} border-gray-200`}
+            className={`${listItemCs} ${index < notes.length - 1 ? 'border-b' : ''}`}
           >
-            <span className="font-bold block">
-              {content.trim().split("\n")[0]}
-            </span>
-            <span className="text-gray-500 text-sm">
-              Created: {formatDate(createdAt)}
-            </span>
+            <h2 className={listItemTitleCs}>{content.trim().split("\n")[0]}</h2>
+            <p className={listItemDescCs}>Created: {formatDate(createdAt)}</p>
           </Link>
         ))}
-      </div>
+      </>
     );
   }
 
   function renderLander() {
     return (
-      <div className="py-20 text-center flex flex-col gap-2">
-        <h1 className="text-4xl font-semibold">Scratch</h1>
-        <p className="text-gray-500">A simple note taking app</p>
+      <div className={landerCs}>
+        <h1 className={landerTitleCs}>Scratch</h1>
+        <p className={landerDescCs}>A simple note taking app</p>
       </div>
     );
   }
 
   function renderNotes() {
     return (
-      <div className="flex flex-col gap-4">
-        <h2 className="pb-3 text-3xl font-serif font-medium border-b border-gray-200">Your Notes</h2>
-        {!isLoading &&
-          <div className="border border-gray-200 rounded-md overflow-hidden">
-            {renderNotesList(notes)}
-          </div>
-        }
+      <div className={notesCs}>
+        <h2 className={notesTitleCs}>Your Notes</h2>
+        {!isLoading && <div className={listCs}>{renderNotesList(notes)}</div>}
       </div>
     );
   }
 
-  return (
-    <div className="container mx-auto">
-      {auth.loggedIn ? renderNotes() : renderLander()}
-    </div>
-  );
+  return auth.loggedIn
+    ? renderNotes()
+    : renderLander();
 }

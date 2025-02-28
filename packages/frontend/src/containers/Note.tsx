@@ -1,12 +1,16 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import config from "../config";
 import { NoteType } from "../types/note";
+import { formCs } from "../lib/stylesLib";
 import { onError } from "../lib/errorLib";
 import Button from "../components/Button";
 import { useAuthFetch } from "../lib/hooksLib";
-import { useParams, useNavigate } from "react-router-dom";
 
-export default function Notes() {
+const attachmentCs =
+  `text-blue-600 hover:text-blue-800 hover:underline`;
+
+export default function Note() {
   const file = useRef<null | File>(null);
   const authFetch = useAuthFetch();
   const { id } = useParams();
@@ -145,57 +149,51 @@ export default function Notes() {
     }
   }
 
-  return (
-    <div className="container mx-auto">
-      {note && (
-        <form onSubmit={handleSubmit} className="mx-auto flex flex-col gap-6">
-          <textarea
-            id="content"
-            className="w-full h-72 p-3 text-2xl border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <div className="flex flex-col gap-2">
-            <label htmlFor="file" className="block font-medium text-gray-700">
-              Attachment
-            </label>
-            {note.attachment && (
-              <p>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={note.attachmentURL}
-                  className="text-blue-600 hover:text-blue-800 hover:underline"
-                >
-                  {formatFilename(note.attachment)}
-                </a>
-              </p>
-            )}
-            <input
-              id="file"
-              type="file"
-              onChange={handleFileChange}
-              className="w-full text-gray-700 border border-gray-300 overflow-hidden rounded focus:outline-none focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:border-r file:border-gray-300 file:text-gray-700 file:bg-gray-100 file:cursor-pointer hover:file:bg-gray-200"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <Button
-              type="submit"
-              loading={isLoading}
-              disabled={!validateForm()}
+  return note && (
+    <form onSubmit={handleSubmit} className={formCs.container}>
+      <textarea
+        id="content"
+        value={content}
+        className={formCs.textarea}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <div className={formCs.field}>
+        <label htmlFor="file" className={formCs.label}>Attachment</label>
+        {note.attachment && (
+          <p>
+            <a
+              target="_blank"
+              className={attachmentCs}
+              rel="noopener noreferrer"
+              href={note.attachmentURL}
             >
-              Save
-            </Button>
-            <Button
-              variant="danger"
-              onClick={handleDelete}
-              loading={isDeleting}
-            >
-              Delete
-            </Button>
-          </div>
-        </form>
-      )}
-    </div>
+              {formatFilename(note.attachment)}
+            </a>
+          </p>
+        )}
+        <input
+          id="file"
+          type="file"
+          className={formCs.file}
+          onChange={handleFileChange}
+        />
+      </div>
+      <div className={formCs.controls}>
+        <Button
+          type="submit"
+          loading={isLoading}
+          disabled={!validateForm()}
+        >
+          Save
+        </Button>
+        <Button
+          variant="danger"
+          onClick={handleDelete}
+          loading={isDeleting}
+        >
+          Delete
+        </Button>
+      </div>
+    </form>
   );
 }
