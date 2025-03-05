@@ -8,9 +8,11 @@ import { useFormFields } from "../lib/hooksLib";
 const formContainerCs =
   `mx-auto md:max-w-md md:pt-15 flex flex-col gap-6`;
 const cardElementCs =
-  `px-4 py-3 w-full border border-gray-300 rounded bg-white
+  `px-4 py-3 w-full border border-gray-300 rounded
   [&.StripeElement--focus]:ring-1 [&.StripeElement--focus]:ring-blue-500
-  [&.StripeElement--focus]:border-blue-500`;
+  [&.StripeElement--focus]:border-blue-500
+  dark:border-gray-700 dark:text-gray-300
+  dark:[&.StripeElement--focus]:ring-blue-400 dark:[&.StripeElement--focus]:border-blue-400`;
 const cardElementInputStyles = {
   fontSize: "18px",
   fontWeight: "400",

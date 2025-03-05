@@ -7,6 +7,10 @@
   --font-serif: "Noto Serif", serif;
 }
 
+body {
+  @apply bg-white text-black dark:bg-black dark:text-white;
+}
+
 button {
   cursor: pointer;
 }

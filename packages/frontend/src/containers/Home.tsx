@@ -12,21 +12,27 @@ const landerCs =
 const landerTitleCs =
   `text-4xl font-semibold`;
 const landerDescCs =
-  `text-gray-500`;
+  `text-gray-500
+  dark:text-gray-400`;
 const notesCs =
   `flex flex-col gap-4`;
 const notesTitleCs =
-  `pb-3 text-3xl font-serif font-medium border-b border-gray-200`;
+  `pb-3 text-3xl font-serif font-medium border-b border-gray-200
+  dark:border-gray-700`;
 const listCs =
-  `border border-gray-200 rounded-md overflow-hidden`;
+  `border border-gray-200 rounded-md overflow-hidden
+  dark:border-gray-700`;
 const listItemCs =
-  `flex flex-col gap-1 py-3 px-4 border-gray-200 hover:bg-gray-100`;
+  `flex flex-col gap-1 py-3 px-4 border-gray-200 hover:bg-gray-100
+  dark:border-gray-700 dark:hover:bg-gray-800`;
 const listItemTitleCs =
   `font-semibold truncate`;
 const listItemDescCs =
-  `text-gray-500 text-sm truncate`;
+  `text-gray-500 text-sm truncate
+  dark:text-gray-400`;
 const listNewItemCs =
-  `flex items-center gap-2 py-3 px-4 border-gray-200 hover:bg-gray-100`;
+  `flex items-center gap-2 py-3 px-4 border-gray-200 hover:bg-gray-100
+  dark:border-gray-700 dark:hover:bg-gray-800`;
 const listNewItemIconCs =
   `shrink-0`;
 const listNewItemTitleCs =

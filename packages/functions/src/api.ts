@@ -57,7 +57,7 @@ app.put("/notes/:id", async (c) => {
     c.get("userId"),
     c.req.param("id"),
     body.content,
-    body.attachment
+    body.attachment || null
   );
 
   return c.json({ status: true });

@@ -7,18 +7,22 @@ import { useAuth } from "./AuthContext";
 const containerCs =
   `max-w-6xl mx-auto p-4 flex flex-col gap-6`;
 const navbarCs =
-  `bg-gray-100 p-2 rounded-lg flex flex-wrap items-center justify-between`;
+  `bg-gray-100 p-2 rounded-lg flex flex-wrap items-center justify-between
+  dark:bg-gray-800`;
 const navbarLogoCs =
-  `px-2 font-bold text-gray-600 text-xl`;
+  `px-2 font-bold text-gray-600 text-xl
+  dark:text-gray-300`;
 const navbarToggleCs =
   `md:hidden inline-flex items-center justify-center px-2 h-[40px] rounded-md
-  text-gray-500 hover:text-gray-600 hover:bg-gray-200`;
+  text-gray-500 hover:text-gray-600 hover:bg-gray-200
+  dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700`;
 const navbarContentCs = `w-full md:block md:w-auto`;
 const navbarLinksCs =
   `flex flex-col md:flex-row md:ml-4 md:items-center md:justify-end`;
 const navbarButtonCs =
   `flex items-center px-3 h-[40px] rounded-md text-gray-600 font-medium text-left
-  hover:text-gray-900 hover:bg-gray-200`;
+  hover:text-gray-900 hover:bg-gray-200
+  dark:text-gray-300 dark:hover:text-gray-200 dark:hover:bg-gray-700`;
 
 function App() {
   const auth = useAuth();

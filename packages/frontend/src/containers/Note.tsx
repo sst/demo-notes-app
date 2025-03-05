@@ -8,7 +8,8 @@ import Button from "../components/Button";
 import { useAuthFetch } from "../lib/hooksLib";
 
 const attachmentCs =
-  `text-blue-600 hover:text-blue-800 hover:underline`;
+  `text-blue-600 hover:text-blue-800 hover:underline
+  dark:text-blue-400 dark:hover:text-blue-500`;
 
 export default function Note() {
   const file = useRef<null | File>(null);

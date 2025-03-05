@@ -24,21 +24,21 @@ function Button({
   const sizeClass = "py-3 px-5 text-lg";
 
   const variantBaseClasses = {
-    "primary": "bg-sky-600 text-white",
-    "success": "bg-teal-600 text-white",
-    "danger": "bg-rose-600 text-white",
+    "primary": "bg-sky-600 text-white dark:bg-sky-500",
+    "success": "bg-teal-600 text-white dark:bg-teal-500",
+    "danger": "bg-rose-600 text-white dark:bg-rose-500",
   };
 
   const variantHoverClasses = {
-    "primary": "hover:bg-sky-500",
-    "success": "hover:bg-teal-500",
-    "danger": "hover:bg-rose-500",
+    "primary": "hover:bg-sky-500 dark:hover:bg-sky-400",
+    "success": "hover:bg-teal-500 dark:hover:bg-teal-400",
+    "danger": "hover:bg-rose-500 dark:hover:bg-rose-400",
   };
 
   const variantActiveClasses = {
-    "primary": "active:bg-sky-700",
-    "success": "active:bg-teal-700",
-    "danger": "active:bg-rose-700",
+    "primary": "active:bg-sky-700 dark:active:bg-sky-600",
+    "success": "active:bg-teal-700 dark:active:bg-teal-600",
+    "danger": "active:bg-rose-700 dark:active:bg-rose-600",
   };
 
   const disabledClasses = disabled ? "opacity-60" : "";
