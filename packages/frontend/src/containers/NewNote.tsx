@@ -1,11 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../config";
-import { NoteType } from "../types/note";
-import { formCs } from "../lib/stylesLib";
-import { onError } from "../lib/errorLib";
+import { formCs } from "../lib/styles";
+import { onError } from "../lib/error";
 import Button from "../components/Button";
-import { useAuthFetch } from "../lib/hooksLib";
+import { useAuthFetch } from "../lib/fetch";
 
 export default function NewNote() {
   const file = useRef<null | File>(null);
@@ -23,15 +22,15 @@ export default function NewNote() {
     file.current = event.currentTarget.files[0];
   }
 
-  function createNote(note: NoteType) {
-    return authFetch(`${config.API_URL}notes`, {
+  function createNote(content: string, attachment?: string) {
+    return authFetch(`${config.API_URL}/notes`, {
       method: "POST",
-      body: JSON.stringify(note),
+      body: JSON.stringify({ content, attachment }),
     });
   }
 
   function getPresignedUpload(fileName: string, fileType: string) {
-    return authFetch(`${config.API_URL}presign`, {
+    return authFetch(`${config.API_URL}/presign`, {
       method: "POST",
       body: JSON.stringify({ fileName, fileType }),
     });
@@ -70,7 +69,7 @@ export default function NewNote() {
         ? await handleUpload(file.current)
         : undefined;
 
-      await createNote({ content, attachment });
+      await createNote(content, attachment);
       nav("/");
     } catch (e) {
       onError(e);

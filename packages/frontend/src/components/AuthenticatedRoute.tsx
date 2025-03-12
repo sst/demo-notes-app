@@ -10,13 +10,13 @@ export default function AuthenticatedRoute({
 
   useEffect(() => {
     async function onLoad() {
-      if (!auth.loggedIn) {
-        await auth.login();
+      if (!auth.user) {
+        auth.authorize(`${window.location.pathname}${window.location.search}`);
       }
     }
 
     onLoad();
-  }, [auth.loggedIn]);
+  }, [auth.user]);
 
-  return auth.loggedIn && children;
+  return auth.user && children;
 }

@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import config from "../config";
-import { NoteType } from "../types/note";
-import { formCs } from "../lib/stylesLib";
-import { onError } from "../lib/errorLib";
+import { formCs } from "../lib/styles";
+import { onError } from "../lib/error";
 import Button from "../components/Button";
-import { useAuthFetch } from "../lib/hooksLib";
+import { useAuthFetch } from "../lib/fetch";
 
 const attachmentCs =
   `text-blue-600 hover:text-blue-800 hover:underline
@@ -16,14 +15,14 @@ export default function Note() {
   const authFetch = useAuthFetch();
   const { id } = useParams();
   const nav = useNavigate();
-  const [note, setNote] = useState<null | NoteType>(null);
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [note, setNote] = useState<null | Record<string, string>>(null);
 
   useEffect(() => {
     function loadNote() {
-      return authFetch(`${config.API_URL}notes/${id}`);
+      return authFetch(`${config.API_URL}/notes/${id}`);
     }
 
     async function onLoad() {
@@ -59,19 +58,19 @@ export default function Note() {
     file.current = event.currentTarget.files[0];
   }
 
-  function saveNote(note: NoteType) {
-    return authFetch(`${config.API_URL}notes/${id}`, {
+  function saveNote(content: string, attachment?: string) {
+    return authFetch(`${config.API_URL}/notes/${id}`, {
       method: "PUT",
-      body: JSON.stringify(note),
+      body: JSON.stringify({ content, attachment }),
     });
   }
 
   function getPresignedDownload(path: string) {
-    return authFetch(`${config.API_URL}presign?path=${encodeURIComponent(path)}`);
+    return authFetch(`${config.API_URL}/presign?path=${encodeURIComponent(path)}`);
   }
 
   function getPresignedUpload(fileName: string, fileType: string) {
-    return authFetch(`${config.API_URL}presign`, {
+    return authFetch(`${config.API_URL}/presign`, {
       method: "POST",
       body: JSON.stringify({ fileName, fileType }),
     });
@@ -114,7 +113,7 @@ export default function Note() {
         attachment = note.attachment;
       }
 
-      await saveNote({ content: content, attachment: attachment });
+      await saveNote(content, attachment);
       nav("/");
     } catch (e) {
       onError(e);
@@ -123,7 +122,7 @@ export default function Note() {
   }
 
   function deleteNote() {
-    return authFetch(`${config.API_URL}notes/${id}`, {
+    return authFetch(`${config.API_URL}/notes/${id}`, {
       method: "DELETE",
     });
   }

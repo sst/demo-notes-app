@@ -1,43 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import config from "../config";
+import { onError } from "../lib/error";
+import { formCs } from "../lib/styles";
+import { useAuth } from "../AuthContext";
 import Button from "../components/Button";
-import { onError } from "../lib/errorLib";
-import { formCs } from "../lib/stylesLib";
-import { useAuthFetch, useFormFields } from "../lib/hooksLib";
+import { useAuthFetch } from "../lib/fetch";
 
 const formContainerCs =
   `mx-auto md:max-w-md md:pt-15 flex flex-col gap-6`;
 const labelCs = `text-center`;
 
 export default function Settings() {
+  const auth = useAuth();
   const authFetch = useAuthFetch();
-  const [fields, handleFieldChange] = useFormFields({
-    name: "",
-    units: "",
-  });
+  const [units, setUnits] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [subscribed, setSubscribed] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    async function onLoad() {
-      try {
-        setSubscribed(await checkSubscription());
-      } catch (e) {
-        onError(e);
-      }
-    }
-
-    onLoad();
-  });
-
-  async function checkSubscription() {
-    const user = await authFetch(`${config.API_URL}me`);
-
-    return user.customerId !== undefined;
+  function isSubscribed() {
+    return auth.user && auth.user.customerId !== undefined;
   }
 
   async function initCheckout(units: number) {
-    const res = await authFetch(`${config.API_URL}checkout`, {
+    const res = await authFetch(`${config.API_URL}/checkout`, {
       method: "POST",
       body: JSON.stringify({ units, redirect: window.location.origin }),
     });
@@ -51,7 +35,7 @@ export default function Settings() {
     setIsLoading(true);
 
     try {
-      const url = await initCheckout(Number(fields.units));
+      const url = await initCheckout(Number(units));
       window.location.href = url;
     } catch (e) {
       onError(e);
@@ -59,19 +43,19 @@ export default function Settings() {
     }
   }
 
-  return (subscribed !== null &&
+  return (
     <div>
       <form onSubmit={handleSubmit} className={formContainerCs}>
         <div className={formCs.field}>
           <label htmlFor="units" className={formCs.label}>Storage</label>
           <input
-            id="units"
             min="0"
+            id="units"
             type="number"
-            value={fields.units}
+            value={units}
             className={formCs.input}
-            onChange={handleFieldChange}
             placeholder="Number of notes to store"
+            onChange={(e) => setUnits(e.target.value)}
           />
         </div>
 
@@ -80,11 +64,11 @@ export default function Settings() {
             type="submit"
             variant="primary"
             loading={isLoading}
-            disabled={fields.units === ""}
+            disabled={units === ""}
           >
             Purchase
           </Button>
-          {subscribed && <p className={labelCs}>You are already subscribed.</p>}
+          {isSubscribed() && <p className={labelCs}>You are already subscribed.</p>}
         </div>
       </form>
     </div>

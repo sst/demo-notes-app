@@ -1,5 +1,5 @@
+import { useCallback } from "react";
 import { useAuth } from "../AuthContext";
-import { useState, useCallback, ChangeEvent, ChangeEventHandler } from "react";
 
 interface AuthFetchOptions extends RequestInit {
   headers?: HeadersInit;
@@ -13,7 +13,7 @@ export function useAuthFetch(): AuthFetchFunction {
   const authFetch = useCallback(
     async (url: string, options: AuthFetchOptions = {}): Promise<any> => {
       try {
-        const token = await auth.getToken();
+        const token = await auth.access();
 
         const headers = {
           "Authorization": `Bearer ${token}`,
@@ -33,28 +33,7 @@ export function useAuthFetch(): AuthFetchFunction {
       } catch (error) {
         throw error;
       }
-    }, [auth]);
+    }, [auth.subject && auth.subject.id]);
 
   return authFetch;
-}
-
-interface FieldsType {
-  [key: string | symbol]: string;
-}
-
-export function useFormFields(
-  initialState: FieldsType
-): [FieldsType, ChangeEventHandler] {
-  const [fields, setValues] = useState(initialState);
-
-  return [
-    fields,
-    function(event: ChangeEvent<HTMLInputElement>) {
-      setValues({
-        ...fields,
-        [event.target.id]: event.target.value,
-      });
-      return;
-    },
-  ];
 }

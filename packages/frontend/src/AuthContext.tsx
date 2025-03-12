@@ -1,163 +1,89 @@
-import {
-  useRef,
-  useState,
-  ReactNode,
-  useEffect,
-  useContext,
-  createContext,
-} from "react";
-import { createClient } from "@openauthjs/openauth/client";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { type Context as OAuthContextType } from "./OAuthContext";
+import { OpenAuthProvider, useOpenAuth } from "./OAuthContext";
+import config from "./config";
 
-const client = createClient({
-  clientID: "web",
-  issuer: import.meta.env.VITE_AUTH_URL,
-});
+type User = Record<string, string>;
 
-interface AuthContextType {
-  userId?: string;
+// Define the enhanced context type
+interface AuthContextType extends OAuthContextType {
+  user?: User;
   loaded: boolean;
-  loggedIn: boolean;
-  logout: () => void;
-  login: () => Promise<void>;
-  getToken: () => Promise<string | undefined>;
 }
 
-const AuthContext = createContext({} as AuthContextType);
+// Create a new context with the enhanced type
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const initializing = useRef(true);
+export function CombinedAuthProvider({ children }: { children: ReactNode }) {
   const [loaded, setLoaded] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const token = useRef<string | undefined>(undefined);
-  const [userId, setUserId] = useState<string | undefined>();
+  const [user, setUser] = useState<User | undefined>(undefined);
+
+  // Use the original useOpenAuth hook to get the OAuth context values
+  const auth = useOpenAuth();
 
   useEffect(() => {
-    async function auth() {
-      const token = await refreshTokens();
-
-      if (token) {
-        await user();
+    async function load() {
+      if (auth.subject) {
+        await fetchUser();
       }
 
       setLoaded(true);
     }
 
-    const hash = new URLSearchParams(location.search.slice(1));
-    const code = hash.get("code");
-    const state = hash.get("state");
+    load();
+  }, [auth.subject && auth.subject.id]);
 
-    if (!initializing.current) {
-      return;
-    }
-
-    initializing.current = false;
-
-    if (code && state) {
-      callback(code, state);
-      return;
-    }
-
-    auth();
-  }, []);
-
-  async function refreshTokens() {
-    const refresh = localStorage.getItem("refresh");
-    if (!refresh) return;
-    const next = await client.refresh(refresh, {
-      access: token.current,
-    });
-    if (next.err) return;
-    if (!next.tokens) return token.current;
-
-    localStorage.setItem("refresh", next.tokens.refresh);
-    token.current = next.tokens.access;
-
-    return next.tokens.access;
-  }
-
-  async function getToken() {
-    const token = await refreshTokens();
-
-    if (!token) {
-      await login();
-      return;
-    }
-
-    return token;
-  }
-
-  async function login() {
-    const redirect = `${window.location.pathname}${window.location.search}`;
-
-    const { challenge, url } = await client.authorize(
-      window.location.origin,
-      "code",
-      { pkce: true }
-    );
-
-    sessionStorage.setItem("redirect", redirect);
-    sessionStorage.setItem("challenge", JSON.stringify(challenge));
-
-    window.location.href = url;
-  }
-
-  async function callback(code: string, state: string) {
-    const redirect = sessionStorage.getItem("redirect");
-    const challenge = JSON.parse(sessionStorage.getItem("challenge")!);
-    if (code) {
-      if (state === challenge.state && challenge.verifier) {
-        const exchanged = await client.exchange(
-          code!,
-          location.origin,
-          challenge.verifier,
-        );
-        if (!exchanged.err) {
-          token.current = exchanged.tokens?.access;
-          localStorage.setItem("refresh", exchanged.tokens.refresh);
-        }
-      }
-      window.location.replace(redirect || "/");
-    }
-  }
-
-  async function user() {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}me`, {
+  async function fetchUser() {
+    console.log("fetching user", auth.subject);
+    const res = await fetch(`${config.API_URL}/me`, {
       headers: {
-        Authorization: `Bearer ${token.current}`,
+        Authorization: `Bearer ${await auth.access()}`,
       },
     });
 
     if (res.ok) {
       const user = await res.json();
 
-      setUserId(user.userId);
-      setLoggedIn(true);
+      setUser(user);
     }
   }
 
   function logout() {
-    localStorage.removeItem("refresh");
-    token.current = undefined;
-
-    window.location.replace("/");
+    auth.logout();
+    window.location.assign("/");
   }
 
+  // Combine the original context with the additional properties
+  const context: AuthContextType = {
+    ...auth,
+    user,
+    loaded,
+    logout,
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        login,
-        logout,
-        userId,
-        loaded,
-        loggedIn,
-        getToken,
-      }}
-    >
+    <AuthContext.Provider value={context}>
       {children}
     </AuthContext.Provider>
   );
 }
 
+// Custom hook to use the enhanced auth context
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within a AuthProvider");
+  }
+  return context;
+}
+
+// Combined provider that wraps both providers
+export function AuthProvider({ children }: { children: ReactNode }) {
+  return (
+    <OpenAuthProvider issuer={config.AUTH_URL} clientID="web">
+      <CombinedAuthProvider>
+        {children}
+      </CombinedAuthProvider>
+    </OpenAuthProvider>
+  );
 }

@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import config from "../config";
+import { onError } from "../lib/error";
 import { useAuth } from "../AuthContext";
-import { NoteType } from "../types/note";
-import { onError } from "../lib/errorLib";
-import { useAuthFetch } from "../lib/hooksLib";
+import { useAuthFetch } from "../lib/fetch";
 
 const landerCs =
   `py-20 text-center flex flex-col gap-2`;
@@ -41,12 +40,12 @@ const listNewItemTitleCs =
 export default function Home() {
   const auth = useAuth();
   const authFetch = useAuthFetch();
-  const [notes, setNotes] = useState<Array<NoteType>>([]);
+  const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function onLoad() {
-      if (!auth.loggedIn) {
+      if (!auth.user) {
         return;
       }
 
@@ -61,17 +60,17 @@ export default function Home() {
     }
 
     onLoad();
-  }, [auth.loggedIn]);
+  }, [auth.user]);
 
   function loadNotes() {
-    return authFetch(`${config.API_URL}notes`);
+    return authFetch(`${config.API_URL}/notes`);
   }
 
   function formatDate(str: undefined | string) {
     return !str ? "" : new Date(str).toLocaleString();
   }
 
-  function renderNotesList(notes: NoteType[]) {
+  function renderNotesList(notes: Record<string, string>[]) {
     return (
       <>
         <Link
@@ -115,7 +114,7 @@ export default function Home() {
     );
   }
 
-  return auth.loggedIn
+  return auth.user
     ? renderNotes()
     : renderLander();
 }

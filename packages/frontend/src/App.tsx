@@ -45,17 +45,17 @@ function App() {
 
         <div className={`${isOpen ? "block" : "hidden"} ${navbarContentCs}`}>
           <div className={navbarLinksCs}>
-            {auth.loggedIn ? (
+            {auth.user ? (
               <>
                 <Link to="/settings" className={navbarButtonCs}>
                   Settings
                 </Link>
-                <button className={navbarButtonCs} onClick={auth.logout}>
+                <button className={navbarButtonCs} onClick={() => auth.logout()}>
                   Logout
                 </button>
               </>
             ) : (
-              <button className={navbarButtonCs} onClick={auth.login}>Login</button>
+              <button className={navbarButtonCs} onClick={() => auth.authorize()}>Login</button>
             )}
           </div>
         </div>

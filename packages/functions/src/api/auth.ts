@@ -5,6 +5,7 @@ import { HTTPException } from "hono/http-exception";
 import { createClient } from "@openauthjs/openauth/client";
 
 const client = createClient({
+  subjects,
   clientID: "jwt-api",
   issuer: Resource.Auth.url,
 });
@@ -13,7 +14,7 @@ export const auth: MiddlewareHandler = async (c, next) => {
   const token = c.req.header("Authorization")?.split(" ")[1];
 
   if (token) {
-    const verified = await client.verify(subjects, token);
+    const verified = await client.verify(token);
 
     if (!verified.err) {
       c.set("userId", verified.subject.properties.id);

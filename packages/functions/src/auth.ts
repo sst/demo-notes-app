@@ -28,7 +28,6 @@ async function getUserId(email: string) {
 
   try {
     user = await Users.getByEmail(email);
-
   } catch (e) {
     user = await Users.create(email);
   }
@@ -68,9 +67,9 @@ const app = issuer({
   },
   success: async (ctx, value) => {
     if (value.provider === "code") {
-      return ctx.subject("user", {
-        id: await getUserId(value.claims.email),
-      });
+      const userId = await getUserId(value.claims.email);
+
+      return ctx.subject("user", userId, { id: userId });
     }
     throw new Error("Invalid provider");
   },
