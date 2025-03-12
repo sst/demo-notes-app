@@ -78,7 +78,9 @@ export default function Home() {
           to="/notes/new"
           className={`${listNewItemCs} ${notes.length > 0 ? 'border-b' : ''}`}
         >
-          <HiOutlinePencilSquare className={listNewItemIconCs} size={17} />
+          <span className={listNewItemIconCs}>
+            <HiOutlinePencilSquare size={17} />
+          </span>
           <span className={listNewItemTitleCs}>Create a new note</span>
         </Link>
         {notes.map(({ noteId, content, createdAt }, index) => (

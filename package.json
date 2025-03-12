@@ -10,6 +10,6 @@
     "typescript": "5.3.3"
   },
   "dependencies": {
-    "sst": "^3"
+    "sst": "3.9.31"
   }
 }

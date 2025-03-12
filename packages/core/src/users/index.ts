@@ -4,6 +4,7 @@ import {
   GetCommand,
   PutCommand,
   QueryCommand,
+  UpdateCommand,
   DynamoDBDocumentClient
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
@@ -19,12 +20,28 @@ export module Users {
         email,
         userId: uuid.v1(),
         createdAt: Date.now(),
+        customerId: undefined,
       },
     };
 
     await dynamoDb.send(new PutCommand(params));
 
     return params.Item;
+  }
+
+  export async function update(userId: string, customerId: string) {
+    const params = {
+      TableName: Resource.Users.name,
+      Key: {
+        userId,
+      },
+      UpdateExpression: "SET customerId = :customerId",
+      ExpressionAttributeValues: {
+        ":customerId": customerId,
+      },
+    };
+
+    await dynamoDb.send(new UpdateCommand(params));
   }
 
   export async function getById(userId: string) {

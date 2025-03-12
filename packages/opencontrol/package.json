@@ -1,0 +1,12 @@
+{
+  "name": "@notes/opencontrol",
+  "version": "0.0.0",
+  "dependencies": {
+    "@notes/core": "*",
+    "aws-sdk": "^2.1692.0",
+    "hono": "^4.7.4",
+    "opencontrol": "^0.0.6",
+    "sst": "*",
+    "zod": "^3.24.2"
+  }
+}

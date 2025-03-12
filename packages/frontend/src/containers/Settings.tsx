@@ -1,65 +1,92 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
+import React, { useState, useEffect } from "react";
 import config from "../config";
+import Button from "../components/Button";
 import { onError } from "../lib/errorLib";
-import { useAuthFetch } from "../lib/hooksLib";
-import { BillingType } from "../types/billing";
-import { BillingForm, BillingFormType } from "../components/BillingForm";
+import { formCs } from "../lib/stylesLib";
+import { useAuthFetch, useFormFields } from "../lib/hooksLib";
 
-const stripePromise = loadStripe(config.STRIPE_KEY);
+const formContainerCs =
+  `mx-auto md:max-w-md md:pt-15 flex flex-col gap-6`;
+const labelCs = `text-center`;
 
 export default function Settings() {
-  const nav = useNavigate();
   const authFetch = useAuthFetch();
+  const [fields, handleFieldChange] = useFormFields({
+    name: "",
+    units: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
+  const [subscribed, setSubscribed] = useState<boolean | null>(null);
 
-  async function billUser(details: BillingType) {
-    return authFetch(`${config.API_URL}billing`, {
-      method: "POST",
-      body: JSON.stringify(details),
-    });
+  useEffect(() => {
+    async function onLoad() {
+      try {
+        setSubscribed(await checkSubscription());
+      } catch (e) {
+        onError(e);
+      }
+    }
+
+    onLoad();
+  });
+
+  async function checkSubscription() {
+    const user = await authFetch(`${config.API_URL}me`);
+
+    return user.customerId !== undefined;
   }
 
-  const handleFormSubmit: BillingFormType["onSubmit"] = async (
-    storage,
-    info
-  ) => {
-    if (info.error) {
-      onError(info.error);
-      return;
-    }
+  async function initCheckout(units: number) {
+    const res = await authFetch(`${config.API_URL}checkout`, {
+      method: "POST",
+      body: JSON.stringify({ units, redirect: window.location.origin }),
+    });
+
+    return res.url;
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
     setIsLoading(true);
 
     try {
-      await billUser({
-        storage,
-        source: info.token?.id,
-      });
-
-      alert("Your card has been charged successfully!");
-      nav("/");
+      const url = await initCheckout(Number(fields.units));
+      window.location.href = url;
     } catch (e) {
       onError(e);
       setIsLoading(false);
     }
-  };
+  }
 
-  return (
+  return (subscribed !== null &&
     <div>
-      <Elements
-        stripe={stripePromise}
-        options={{
-          fonts: [{
-            cssSrc:
-              "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap",
-          }],
-        }}
-      >
-        <BillingForm isLoading={isLoading} onSubmit={handleFormSubmit} />
-      </Elements>
+      <form onSubmit={handleSubmit} className={formContainerCs}>
+        <div className={formCs.field}>
+          <label htmlFor="units" className={formCs.label}>Storage</label>
+          <input
+            id="units"
+            min="0"
+            type="number"
+            value={fields.units}
+            className={formCs.input}
+            onChange={handleFieldChange}
+            placeholder="Number of notes to store"
+          />
+        </div>
+
+        <div className={formCs.controls}>
+          <Button
+            type="submit"
+            variant="primary"
+            loading={isLoading}
+            disabled={fields.units === ""}
+          >
+            Purchase
+          </Button>
+          {subscribed && <p className={labelCs}>You are already subscribed.</p>}
+        </div>
+      </form>
     </div>
   );
 }
