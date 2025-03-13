@@ -1,11 +1,9 @@
 import { Resource } from "sst";
-import { subjects } from "../subjects";
 import { MiddlewareHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { createClient } from "@openauthjs/openauth/client";
 
 const client = createClient({
-  subjects,
   clientID: "jwt-api",
   issuer: Resource.Auth.url,
 });

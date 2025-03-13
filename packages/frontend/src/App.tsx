@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { HiBars3, HiXMark } from "react-icons/hi2";
 import AppRoutes from "./Routes";
-import { useAuth } from "./AuthContext";
+import { useOpenAuth } from "./OAuthContext";
+import { useAccount } from "./AccountContext";
 
 const containerCs =
   `max-w-6xl mx-auto p-4 flex flex-col gap-6`;
@@ -25,37 +26,41 @@ const navbarButtonCs =
   dark:text-gray-300 dark:hover:text-gray-200 dark:hover:bg-gray-700`;
 
 function App() {
-  const auth = useAuth();
+  const auth = useOpenAuth();
+  const account = useAccount();
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleNavbar = () => {
+  function toggleNavbar() {
     setIsOpen(!isOpen);
-  };
+  }
 
-  return auth.loaded && (
+  function handleLogout() {
+    auth.logout();
+    window.location.assign("/");
+  }
+
+  return account.loaded && (
     <div className={containerCs}>
       <nav className={navbarCs}>
-        <Link to="/" className={navbarLogoCs}>
-          Scratch
-        </Link>
-
+        <Link to="/" className={navbarLogoCs}>Scratch</Link>
         <button onClick={toggleNavbar} className={navbarToggleCs}>
           {isOpen ? <HiXMark size="20" /> : <HiBars3 size="20" />}
         </button>
-
         <div className={`${isOpen ? "block" : "hidden"} ${navbarContentCs}`}>
           <div className={navbarLinksCs}>
-            {auth.user ? (
+            {account.userId ? (
               <>
                 <Link to="/settings" className={navbarButtonCs}>
                   Settings
                 </Link>
-                <button className={navbarButtonCs} onClick={() => auth.logout()}>
+                <button className={navbarButtonCs} onClick={handleLogout}>
                   Logout
                 </button>
               </>
             ) : (
-              <button className={navbarButtonCs} onClick={() => auth.authorize()}>Login</button>
+              <button className={navbarButtonCs} onClick={() => auth.authorize()}>
+                Login
+              </button>
             )}
           </div>
         </div>

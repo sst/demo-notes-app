@@ -6,7 +6,6 @@ import { CodeUI } from "@openauthjs/openauth/ui/code";
 import type { Theme } from "@openauthjs/openauth/ui/theme"
 import { CodeProvider } from "@openauthjs/openauth/provider/code";
 import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
-import { subjects } from "./subjects";
 
 const MyTheme: Theme = {
   title: "Scratch",
@@ -36,7 +35,6 @@ async function getUserId(email: string) {
 }
 
 const app = issuer({
-  subjects,
   // Remove after setting custom domain
   allow: async () => true,
   theme: MyTheme,

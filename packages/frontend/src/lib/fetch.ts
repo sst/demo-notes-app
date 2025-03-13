@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useAuth } from "../AuthContext";
+import { useOpenAuth } from "../OAuthContext";
 
 interface AuthFetchOptions extends RequestInit {
   headers?: HeadersInit;
@@ -8,21 +8,17 @@ interface AuthFetchOptions extends RequestInit {
 type AuthFetchFunction = (url: string, options?: AuthFetchOptions) => Promise<any>;
 
 export function useAuthFetch(): AuthFetchFunction {
-  const auth = useAuth();
+  const auth = useOpenAuth();
 
   const authFetch = useCallback(
     async (url: string, options: AuthFetchOptions = {}): Promise<any> => {
       try {
-        const token = await auth.access();
-
-        const headers = {
-          "Authorization": `Bearer ${token}`,
-          ...options.headers,
-        };
-
         const response = await fetch(url, {
           ...options,
-          headers,
+          headers: {
+            "Authorization": `Bearer ${await auth.access()}`,
+            ...options.headers,
+          }
         });
 
         if (!response.ok) {

@@ -1,19 +1,18 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { type Context as OAuthContextType } from "./OAuthContext";
-import { OpenAuthProvider, useOpenAuth } from "./OAuthContext";
+import { useOpenAuth } from "./OAuthContext";
 import config from "./config";
 
 type User = Record<string, string>;
 
-interface AuthContextType extends OAuthContextType {
+interface AccountContextType {
   user?: User;
   userId?: string;
   loaded: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext({} as AccountContextType);
 
-export function AuthUserProvider({ children }: { children: ReactNode }) {
+export function AccountProvider({ children }: { children: ReactNode }) {
   const [loaded, setLoaded] = useState(false);
   const [user, setUser] = useState<User | undefined>(undefined);
 
@@ -45,40 +44,23 @@ export function AuthUserProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  function logout() {
-    auth.logout();
-    window.location.assign("/");
-  }
-
-  const context: AuthContextType = {
-    ...auth,
-    user,
-    loaded,
-    logout,
-    userId: user?.userId,
-  };
-
   return (
-    <AuthContext.Provider value={context}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loaded,
+        userId: user?.userId,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
+export function useAccount() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within a AuthProvider");
+    throw new Error("useAccount must be used within a AccountProvider");
   }
   return context;
-}
-
-export function AuthProvider({ children }: { children: ReactNode }) {
-  return (
-    <OpenAuthProvider issuer={config.AUTH_URL} clientID="web">
-      <AuthUserProvider>
-        {children}
-      </AuthUserProvider>
-    </OpenAuthProvider>
-  );
 }

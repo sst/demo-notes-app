@@ -1,22 +1,24 @@
 import { ReactElement, useEffect } from "react";
-import { useAuth } from "../AuthContext";
+import { useAccount } from "../AccountContext";
+import { useOpenAuth } from "../OAuthContext";
 
 export default function AuthenticatedRoute({
   children,
 }: {
   children: ReactElement;
 }) {
-  const auth = useAuth();
+  const auth = useOpenAuth();
+  const account = useAccount();
 
   useEffect(() => {
     async function onLoad() {
-      if (!auth.user) {
+      if (!account.userId) {
         auth.authorize(`${window.location.pathname}${window.location.search}`);
       }
     }
 
     onLoad();
-  }, [auth.user]);
+  }, [account.userId]);
 
-  return auth.user && children;
+  return account.userId && children;
 }

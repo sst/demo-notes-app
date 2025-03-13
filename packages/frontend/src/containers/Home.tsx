@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import config from "../config";
 import { onError } from "../lib/error";
-import { useAuth } from "../AuthContext";
 import { useAuthFetch } from "../lib/fetch";
+import { useAccount } from "../AccountContext";
 
 const landerCs =
   `py-20 text-center flex flex-col gap-2`;
@@ -38,14 +38,14 @@ const listNewItemTitleCs =
   `font-semibold truncate`;
 
 export default function Home() {
-  const auth = useAuth();
+  const account = useAccount();
   const authFetch = useAuthFetch();
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function onLoad() {
-      if (!auth.user) {
+      if (!account.userId) {
         return;
       }
 
@@ -60,7 +60,7 @@ export default function Home() {
     }
 
     onLoad();
-  }, [auth.user]);
+  }, [account.userId]);
 
   function loadNotes() {
     return authFetch(`${config.API_URL}/notes`);
@@ -114,7 +114,7 @@ export default function Home() {
     );
   }
 
-  return auth.user
+  return account.userId
     ? renderNotes()
     : renderLander();
 }
