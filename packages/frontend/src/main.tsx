@@ -9,7 +9,10 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <OpenAuthProvider issuer={config.AUTH_URL} clientID="web">
+    <OpenAuthProvider
+      clientID="web"
+      issuer={config.AUTH_URL}
+    >
       <AccountProvider>
         <Router>
           <App />

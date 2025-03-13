@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import config from "../config";
 import { onError } from "../lib/error";
 import { formCs } from "../lib/styles";
-import { useAuth } from "../AuthContext";
 import Button from "../components/Button";
 import { useAuthFetch } from "../lib/fetch";
+import { useAccount } from "../AccountContext";
 
 const formContainerCs =
   `mx-auto md:max-w-md md:pt-15 flex flex-col gap-6`;
 const labelCs = `text-center`;
 
 export default function Settings() {
-  const auth = useAuth();
+  const account = useAccount();
   const authFetch = useAuthFetch();
   const [units, setUnits] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   function isSubscribed() {
-    return auth.user && auth.user.customerId !== undefined;
+    return account.user && account.user.customerId !== undefined;
   }
 
   async function initCheckout(units: number) {

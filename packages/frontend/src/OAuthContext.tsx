@@ -19,11 +19,11 @@ interface Storage {
   current?: string
 }
 
-export interface Context {
+interface Context {
   all: Record<string, SubjectInfo>
   subject?: SubjectInfo
   switch(id: string): void
-  logout(id?: string): void
+  logout(id: string): void
   access(id?: string): Promise<string | undefined>
   authorize(redirectPath?: string): void
 }
@@ -39,7 +39,7 @@ interface AuthContextOpts {
   children: ReactNode
 }
 
-export const AuthContext = createContext<Context | undefined>(undefined)
+const AuthContext = createContext<Context | undefined>(undefined)
 
 const STORAGE_PREFIX = "openauth"
 
@@ -170,17 +170,16 @@ export function OpenAuthProvider(props: AuthContextOpts) {
       }))
     },
     authorize,
-    logout(id?: string) {
-      const targetId = id || storage.current
-      if (!targetId || !storage.subjects[targetId]) return
+    logout(id: string) {
+      if (!storage.subjects[id]) return
       setStorage(prev => {
         const newSubjects = { ...prev.subjects }
-        delete newSubjects[targetId]
+        delete newSubjects[id]
 
         return {
           ...prev,
           subjects: newSubjects,
-          current: prev.current === targetId ? Object.keys(newSubjects)[0] : prev.current
+          current: prev.current === id ? Object.keys(newSubjects)[0] : prev.current
         }
       })
     },
