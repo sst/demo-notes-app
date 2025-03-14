@@ -188,8 +188,8 @@ export default function Note() {
         </Button>
         <Button
           variant="danger"
-          onClick={handleDelete}
           loading={isDeleting}
+          onClick={handleDelete}
         >
           Delete
         </Button>

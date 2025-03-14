@@ -12,6 +12,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <OpenAuthProvider
       clientID="web"
       issuer={config.AUTH_URL}
+      onExpiry={async (_id, ctx) =>
+        ctx.authorize(`${window.location.pathname}${window.location.search}`)
+      }
     >
       <AccountProvider>
         <Router>

@@ -8,7 +8,7 @@
     "@aws-sdk/lib-dynamodb": "^3.616.0",
     "@aws-sdk/s3-request-presigner": "^3.750.0",
     "@notes/core": "*",
-    "@openauthjs/openauth": "0.0.0-20250311201457",
+    "@openauthjs/openauth": "0.0.0-20250313181957",
     "hono": "^4.6.19",
     "sst": "*",
     "stripe": "^16.4.0",

@@ -41,7 +41,7 @@ function Button({
     "danger": "active:bg-rose-700 dark:active:bg-rose-600",
   };
 
-  const disabledClasses = disabled ? "opacity-60" : "";
+  const disabledClasses = (disabled || loading) ? "opacity-60" : "";
 
   const hoverClass = (!disabled && !loading) ? variantHoverClasses[variant] : "";
 
@@ -61,7 +61,7 @@ function Button({
       disabled={disabled || loading}
       {...rest}
     >
-      {loading && <HiArrowPath className="animate-spin" />}
+      {loading && <span className="animate-spin"><HiArrowPath /></span>}
       {children}
     </button>
   );
