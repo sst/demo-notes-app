@@ -41,7 +41,6 @@ const privateRoutes = new Hono<{ Variables: Variables }>()
   })
   .delete("/notes/:id", async (c) => {
     await Notes.remove(c.get("userId")!, c.req.param("id"));
-
     return c.json({ status: true });
   })
   .post("/checkout", async (c) => {
@@ -69,8 +68,8 @@ const publicRoutes = new Hono<{ Variables: Variables }>()
   .post("/webhook", async (c) => {
     const rawBody = Buffer.from(await c.req.arrayBuffer());
     const sig = c.req.header("Stripe-Signature");
-    const secret = "whsec_YFxCTCIiA7Rg0JBTEri9QKJO7vdbO79f";
-    const event = Stripe.webhooks.constructEvent(rawBody, sig!, secret)
+    const secret = process.env.STRIPE_WEBHOOK_SECRET!;
+    const event = Stripe.webhooks.constructEvent(rawBody, sig!, secret);
     const subscription = event.data.object as Stripe.Subscription;
 
     await Billing.createCustomer(subscription);
