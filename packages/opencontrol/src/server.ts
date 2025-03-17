@@ -53,6 +53,7 @@ const stripe = tool({
 const app = create({
   key: process.env.OPENCONTROL_KEY,
   tools: [aws, stripe, ...tools],
+  anthropicApiKey: Resource.AnthropicKey.value,
 });
 
 export const handler = handle(app);

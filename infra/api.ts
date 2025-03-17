@@ -14,10 +14,16 @@ export const stripeWebhook = new stripe.WebhookEndpoint("StripeWebhook", {
   description: "Webhook for Stripe subscription created event",
 });
 
+api.addEnvironment({
+  STRIPE_WEBHOOK_SECRET: stripeWebhook.secret,
+});
+
+const anthropicKey = new sst.Secret("AnthropicKey");
+
 new sst.aws.OpenControl("OpenControl", {
   server: {
     handler: "packages/opencontrol/src/server.handler",
-    link: [notes, users, bucket, stripeInfo],
+    link: [notes, users, bucket, anthropicKey, stripeInfo],
     transform: {
       role: (args) => {
         args.managedPolicyArns = $output(args.managedPolicyArns).apply(
