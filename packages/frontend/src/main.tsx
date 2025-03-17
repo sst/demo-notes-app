@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { AccountProvider } from "./AccountContext";
 import { OpenAuthProvider } from "./OAuthContext";
 import config from "./config";
@@ -17,9 +17,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       }
     >
       <AccountProvider>
-        <Router>
+        <BrowserRouter>
           <App />
-        </Router>
+        </BrowserRouter>
       </AccountProvider>
     </OpenAuthProvider>
   </StrictMode>

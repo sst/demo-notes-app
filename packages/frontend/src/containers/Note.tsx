@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router";
 import config from "../config";
 import { formCs } from "../lib/styles";
 import { onError } from "../lib/error";

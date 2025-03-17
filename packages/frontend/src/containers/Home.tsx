@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useState, useEffect } from "react";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import config from "../config";

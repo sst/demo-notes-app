@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router";
 import Home from "./containers/Home";
 import Note from "./containers/Note";
 import NewNote from "./containers/NewNote";
@@ -9,7 +9,7 @@ import AuthenticatedRoute from "./components/AuthenticatedRoute";
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route index element={<Home />} />
       <Route
         path="/settings"
         element={
