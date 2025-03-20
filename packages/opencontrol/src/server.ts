@@ -5,6 +5,8 @@ import { create } from "opencontrol";
 import { tool } from "opencontrol/tool";
 import { tools } from "sst/opencontrol";
 import { handle } from "hono/aws-lambda";
+import { createAnthropic } from "@ai-sdk/anthropic";
+
 
 const aws = tool({
   name: "aws",
@@ -51,9 +53,10 @@ const stripe = tool({
 });
 
 const app = create({
-  key: process.env.OPENCONTROL_KEY,
-  tools: [aws, stripe, ...tools],
-  anthropicApiKey: Resource.AnthropicKey.value,
+  model: createAnthropic({
+    apiKey: Resource.AnthropicKey.value,
+  })("claude-3-7-sonnet-20250219"),
+  tools: [aws, stripe],
 });
 
 export const handler = handle(app);

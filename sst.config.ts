@@ -12,7 +12,11 @@ export default $config({
     await import("./infra/storage");
     await import("./infra/billing");
     await import("./infra/auth");
-    await import("./infra/api");
+    const { opencontrol } = await import("./infra/api");
     await import("./infra/web");
+
+    return {
+      OpenControlPassword: opencontrol.password,
+    };
   },
 });

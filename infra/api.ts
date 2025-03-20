@@ -20,16 +20,10 @@ api.addEnvironment({
 
 const anthropicKey = new sst.Secret("AnthropicKey");
 
-new sst.aws.OpenControl("OpenControl", {
+export const opencontrol = new sst.aws.OpenControl("OpenControl", {
   server: {
     handler: "packages/opencontrol/src/server.handler",
+    policies: ["arn:aws:iam::aws:policy/ReadOnlyAccess"],
     link: [notes, users, bucket, anthropicKey, stripeInfo],
-    transform: {
-      role: (args) => {
-        args.managedPolicyArns = $output(args.managedPolicyArns).apply(
-          (v) => [...(v ?? []), "arn:aws:iam::aws:policy/ReadOnlyAccess"]
-        );
-      },
-    },
   },
 });
