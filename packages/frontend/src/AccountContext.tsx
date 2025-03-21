@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { useOpenAuth } from "./OAuthContext";
 import config from "./config";
+import { useOpenAuth } from "@openauthjs/react"
 
 type User = Record<string, string>;
 
@@ -23,7 +23,6 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       if (auth.subject) {
         await fetchUser();
       }
-
       setLoaded(true);
     }
 

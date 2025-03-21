@@ -2,10 +2,10 @@ import { StrictMode } from 'react'
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import { AccountProvider } from "./AccountContext";
-import { OpenAuthProvider } from "./OAuthContext";
 import config from "./config";
 import App from "./App";
 import "./index.css";
+import { OpenAuthProvider } from '@openauthjs/react';
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
