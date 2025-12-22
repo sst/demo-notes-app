@@ -2,6 +2,13 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Recent Updates
+
+**December 2025** - Updated to AWS Amplify v6
+- Migrated from aws-amplify v5 to v6 with new API structure
+- Auth, API, and Storage methods now use modular imports from `aws-amplify/auth`, `aws-amplify/api`, and `aws-amplify/storage`
+- Updated all dependencies to latest versions including React 19, Vite 7, and TypeScript 5.9
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
