@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { API } from "aws-amplify";
+import { get } from "aws-amplify/api";
 import { NoteType } from "../types/note";
 import { onError } from "../lib/errorLib";
 import { BsPencilSquare } from "react-icons/bs";
@@ -32,8 +32,14 @@ export default function Home() {
     onLoad();
   }, [isAuthenticated]);
 
-  function loadNotes() {
-    return API.get("notes", "/notes", {});
+  async function loadNotes() {
+    const restOperation = get({
+      apiName: "notes",
+      path: "/notes",
+    });
+    const { body } = await restOperation.response;
+    const json = await body.json();
+    return json as any as Array<NoteType>;
   }
 
   function formatDate(str: undefined | string) {

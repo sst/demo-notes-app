@@ -5,7 +5,8 @@ import { NoteType } from "../types/note";
 import { s3Upload } from "../lib/awsLib";
 import { onError } from "../lib/errorLib";
 import Stack from "react-bootstrap/Stack";
-import { API, Storage } from "aws-amplify";
+import { get, put, del } from "aws-amplify/api";
+import { getUrl } from "aws-amplify/storage";
 import LoaderButton from "../components/LoaderButton";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Notes.css";
@@ -20,8 +21,14 @@ export default function Notes() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    function loadNote() {
-      return API.get("notes", `/notes/${id}`, {});
+    async function loadNote() {
+      const restOperation = get({
+        apiName: "notes",
+        path: `/notes/${id}`,
+      });
+      const { body } = await restOperation.response;
+      const json = await body.json();
+      return json as any as NoteType;
     }
 
     async function onLoad() {
@@ -30,7 +37,10 @@ export default function Notes() {
         const { content, attachment } = note;
 
         if (attachment) {
-          note.attachmentURL = await Storage.vault.get(attachment);
+          const result = await getUrl({
+            path: attachment,
+          });
+          note.attachmentURL = result.url.toString();
         }
 
         setContent(content);
@@ -56,10 +66,15 @@ export default function Notes() {
     file.current = event.currentTarget.files[0];
   }
 
-  function saveNote(note: NoteType) {
-    return API.put("notes", `/notes/${id}`, {
-      body: note,
+  async function saveNote(note: NoteType) {
+    const restOperation = put({
+      apiName: "notes",
+      path: `/notes/${id}`,
+      options: {
+        body: note as any,
+      },
     });
+    await restOperation.response;
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -96,8 +111,12 @@ export default function Notes() {
     }
   }
 
-  function deleteNote() {
-    return API.del("notes", `/notes/${id}`, {});
+  async function deleteNote() {
+    const restOperation = del({
+      apiName: "notes",
+      path: `/notes/${id}`,
+    });
+    await restOperation.response;
   }
 
   async function handleDelete(event: React.FormEvent<HTMLModElement>) {

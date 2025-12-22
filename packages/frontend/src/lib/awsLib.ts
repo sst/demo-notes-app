@@ -1,11 +1,15 @@
-import { Storage } from "aws-amplify";
+import { uploadData } from "aws-amplify/storage";
 
 export async function s3Upload(file: File) {
   const filename = `${Date.now()}-${file.name}`;
 
-  const stored = await Storage.vault.put(filename, file, {
-    contentType: file.type,
-  });
+  const result = await uploadData({
+    path: `private/${filename}`,
+    data: file,
+    options: {
+      contentType: file.type,
+    },
+  }).result;
 
-  return stored.key;
+  return result.path;
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Auth } from "aws-amplify";
+import { signUp, confirmSignUp, signIn, type SignUpOutput } from "aws-amplify/auth";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import { onError } from "../lib/errorLib";
@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useFormFields } from "../lib/hooksLib";
 import { useAppContext } from "../lib/contextLib";
 import LoaderButton from "../components/LoaderButton";
-import { ISignUpResult } from "amazon-cognito-identity-js";
 import "./Signup.css";
 
 export default function Signup() {
@@ -20,7 +19,7 @@ export default function Signup() {
   const nav = useNavigate();
   const { userHasAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
-  const [newUser, setNewUser] = useState<null | ISignUpResult>(null);
+  const [newUser, setNewUser] = useState<null | SignUpOutput>(null);
 
   function validateForm() {
     return (
@@ -38,9 +37,14 @@ export default function Signup() {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const newUser = await Auth.signUp({
+      const newUser = await signUp({
         username: fields.email,
         password: fields.password,
+        options: {
+          userAttributes: {
+            email: fields.email,
+          },
+        },
       });
       setIsLoading(false);
       setNewUser(newUser);
@@ -56,8 +60,11 @@ export default function Signup() {
     event.preventDefault();
     setIsLoading(true);
     try {
-      await Auth.confirmSignUp(fields.email, fields.confirmationCode);
-      await Auth.signIn(fields.email, fields.password);
+      await confirmSignUp({
+        username: fields.email,
+        confirmationCode: fields.confirmationCode,
+      });
+      await signIn({ username: fields.email, password: fields.password });
       userHasAuthenticated(true);
       nav("/");
     } catch (e) {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Auth } from "aws-amplify";
+import { signIn } from "aws-amplify/auth";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 import { onError } from "../lib/errorLib";
@@ -27,7 +27,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      await Auth.signIn(fields.email, fields.password);
+      await signIn({ username: fields.email, password: fields.password });
       userHasAuthenticated(true);
     } catch (error) {
       onError(error);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Auth } from "aws-amplify";
+import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import Nav from "react-bootstrap/Nav";
 import { onError } from "./lib/errorLib";
 import Navbar from "react-bootstrap/Navbar";
@@ -21,7 +21,7 @@ function App() {
 
   async function onLoad() {
     try {
-      await Auth.currentSession();
+      await fetchAuthSession();
       userHasAuthenticated(true);
     } catch (error) {
       if (error !== "No current user") {
@@ -33,7 +33,7 @@ function App() {
   }
 
   async function handleLogout() {
-    await Auth.signOut();
+    await signOut();
 
     userHasAuthenticated(false);
 

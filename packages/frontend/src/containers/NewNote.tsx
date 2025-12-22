@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { API } from "aws-amplify";
+import { post } from "aws-amplify/api";
 import Form from "react-bootstrap/Form";
 import { NoteType } from "../types/note";
 import { s3Upload } from "../lib/awsLib";
@@ -25,10 +25,15 @@ export default function NewNote() {
     file.current = event.currentTarget.files[0];
   }
 
-  function createNote(note: NoteType) {
-    return API.post("notes", "/notes", {
-      body: note,
+  async function createNote(note: NoteType) {
+    const restOperation = post({
+      apiName: "notes",
+      path: "/notes",
+      options: {
+        body: note as any,
+      },
     });
+    await restOperation.response;
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
