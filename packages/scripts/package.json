@@ -2,7 +2,7 @@
   "name": "@notes/scripts",
   "version": "0.0.0",
   "dependencies": {
-    "@notes/core": "*",
+    "@notes/core": "^0.0.0",
     "sst": "*"
   },
   "scripts": {
@@ -10,6 +10,6 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.11",
-    "tsx": "^4.7.2"
+    "tsx": "^4.21.0"
   }
 }

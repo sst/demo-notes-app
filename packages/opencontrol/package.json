@@ -1,0 +1,13 @@
+{
+  "name": "@notes/opencontrol",
+  "version": "0.0.0",
+  "dependencies": {
+    "@ai-sdk/anthropic": "^1.2.12",
+    "@notes/core": "^0.0.0",
+    "aws-sdk": "^2.1692.0",
+    "hono": "^4.7.4",
+    "opencontrol": "^0.0.15",
+    "sst": "*",
+    "zod": "^3.24.2"
+  }
+}

@@ -1,22 +1,29 @@
-import { table, secret } from "./storage";
+import { auth } from "./auth";
+import { stripeInfo } from "./billing";
+import { users, notes, bucket } from "./storage";
 
-// Create the API
-export const api = new sst.aws.ApiGatewayV2("Api", {
-  transform: {
-    route: {
-      handler: {
-        link: [table, secret],
-      },
-      args: {
-        auth: { iam: true }
-      },
-    }
-  }
+export const api = new sst.aws.Function("Api", {
+  url: true,
+  handler: "packages/functions/src/api/index.handler",
+  link: [auth, users, notes, bucket, stripeInfo],
 });
 
-api.route("GET /notes", "packages/functions/src/list.main");
-api.route("POST /notes", "packages/functions/src/create.main");
-api.route("GET /notes/{id}", "packages/functions/src/get.main");
-api.route("PUT /notes/{id}", "packages/functions/src/update.main");
-api.route("DELETE /notes/{id}", "packages/functions/src/delete.main");
-api.route("POST /billing", "packages/functions/src/billing.main");
+export const stripeWebhook = new stripe.WebhookEndpoint("StripeWebhook", {
+  url: $interpolate`${api.url}webhook`,
+  enabledEvents: ["customer.subscription.created"],
+  description: "Webhook for Stripe subscription created event",
+});
+
+api.addEnvironment({
+  STRIPE_WEBHOOK_SECRET: stripeWebhook.secret,
+});
+
+const anthropicKey = new sst.Secret("AnthropicKey");
+
+export const opencontrol = new sst.aws.OpenControl("OpenControl", {
+  server: {
+    handler: "packages/opencontrol/src/server.handler",
+    policies: ["arn:aws:iam::aws:policy/ReadOnlyAccess"],
+    link: [notes, users, bucket, anthropicKey, stripeInfo],
+  },
+});

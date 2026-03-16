@@ -1,24 +1,22 @@
 /// <reference path="./.sst/platform/config.d.ts" />
-
 export default $config({
   app(input) {
     return {
       name: "notes",
       removal: "remove",
       home: "aws",
+      providers: { stripe: "0.0.24" },
     };
   },
   async run() {
-    await import("./infra/api");
-    await import("./infra/web");
     await import("./infra/storage");
-    const auth = await import("./infra/auth");
+    await import("./infra/billing");
+    await import("./infra/auth");
+    const { opencontrol } = await import("./infra/api");
+    await import("./infra/web");
 
     return {
-      UserPool: auth.userPool.id,
-      Region: aws.getRegionOutput().name,
-      IdentityPool: auth.identityPool.id,
-      UserPoolClient: auth.userPoolClient.id,
+      OpenControlPassword: opencontrol.password,
     };
   },
 });
