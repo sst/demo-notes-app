@@ -1,56 +1,31 @@
-import { Route, Routes } from "react-router-dom";
-import Home from "./containers/Home.tsx";
-import Login from "./containers/Login.tsx";
-import Notes from "./containers/Notes.tsx";
-import Signup from "./containers/Signup.tsx";
-import NewNote from "./containers/NewNote.tsx";
-import Settings from "./containers/Settings.tsx";
-import NotFound from "./containers/NotFound.tsx";
-import AuthenticatedRoute from "./components/AuthenticatedRoute.tsx";
-import UnauthenticatedRoute from "./components/UnauthenticatedRoute.tsx";
+import { Route, Routes } from "react-router";
+import Home from "./containers/Home";
+import Note from "./containers/Note";
+import NewNote from "./containers/NewNote";
+import Settings from "./containers/Settings";
+import NotFound from "./containers/NotFound";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
 
-export default function Links() {
+export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route
-        path="/login"
-        element={
-          <UnauthenticatedRoute>
-            <Login />
-          </UnauthenticatedRoute>
-        }
-      />
-      <Route
-        path="/signup"
-        element={
-          <UnauthenticatedRoute>
-            <Signup />
-          </UnauthenticatedRoute>
-        }
-      />
+      <Route index element={<Home />} />
       <Route
         path="/settings"
         element={
-          <AuthenticatedRoute>
-            <Settings />
-          </AuthenticatedRoute>
+          <AuthenticatedRoute><Settings /></AuthenticatedRoute>
         }
       />
       <Route
         path="/notes/new"
         element={
-          <AuthenticatedRoute>
-            <NewNote />
-          </AuthenticatedRoute>
+          <AuthenticatedRoute><NewNote /></AuthenticatedRoute>
         }
       />
       <Route
         path="/notes/:id"
         element={
-          <AuthenticatedRoute>
-            <Notes />
-          </AuthenticatedRoute>
+          <AuthenticatedRoute><Note /></AuthenticatedRoute>
         }
       />
       {/* Finally, catch all unmatched routes */}

@@ -1,45 +1,16 @@
-import { api } from "./api";
-import { bucket } from "./storage";
+import { users } from "./storage";
+import { domain } from "./constants";
 
-const region = aws.getRegionOutput().name;
-
-export const userPool = new sst.aws.CognitoUserPool("UserPool", {
-  usernames: ["email"]
+export const email = new sst.aws.Email("Email", {
+  sender: "jay@sst.dev",
 });
 
-export const userPoolClient = userPool.addClient("UserPoolClient");
-
-export const identityPool = new sst.aws.CognitoIdentityPool("IdentityPool", {
-  userPools: [
-    {
-      userPool: userPool.id,
-      client: userPoolClient.id,
+export const auth = new sst.aws.Auth("Auth", {
+  issuer: {
+    link: [users, email],
+    handler: "packages/functions/src/auth.handler",
+    environment: {
+      FRONTEND_URL: $dev ? "http://localhost:5173" : `https://${domain}`,
     },
-  ],
-  permissions: {
-    authenticated: [
-      {
-        actions: ["s3:*"],
-        resources: [
-          $concat(bucket.arn, "/private/${cognito-identity.amazonaws.com:sub}/*"),
-        ],
-      },
-      {
-        actions: [
-          "execute-api:*",
-        ],
-        resources: [
-          $concat(
-            "arn:aws:execute-api:",
-            region,
-            ":",
-            aws.getCallerIdentityOutput({}).accountId,
-            ":",
-            api.nodes.api.id,
-            "/*/*/*"
-          ),
-        ],
-      },
-    ],
   },
 });

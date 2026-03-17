@@ -1,22 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:wght@100..900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Noto Sans", sans-serif;
+  --font-serif: "Noto Serif", serif;
+}
+
 body {
-  margin: 0;
-  padding: 0;
-  color: #333;
-  font-size: 16px;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  font-family: "Open Sans", sans-serif;
+  @apply bg-white text-black dark:bg-black dark:text-white;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "PT Serif", serif;
-}
-
-select.form-control,
-textarea.form-control,
-input.form-control {
-  font-size: 1rem;
-}
-input[type="file"] {
-  width: 100%;
+button {
+  cursor: pointer;
 }

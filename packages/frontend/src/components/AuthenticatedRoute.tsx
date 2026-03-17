@@ -1,18 +1,24 @@
-import { ReactElement } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAppContext } from "../lib/contextLib";
+import { ReactElement, useEffect } from "react";
+import { useAccount } from "../AccountContext";
+import { useOpenAuth } from "../OAuthContext";
 
 export default function AuthenticatedRoute({
   children,
 }: {
   children: ReactElement;
-}): ReactElement {
-  const { pathname, search } = useLocation();
-  const { isAuthenticated } = useAppContext();
+}) {
+  const auth = useOpenAuth();
+  const account = useAccount();
 
-  if (!isAuthenticated) {
-    return <Navigate to={`/login?redirect=${pathname}${search}`} />;
-  }
+  useEffect(() => {
+    async function onLoad() {
+      if (!account.userId) {
+        auth.authorize(`${window.location.pathname}${window.location.search}`);
+      }
+    }
 
-  return children;
+    onLoad();
+  }, [account.userId]);
+
+  return account.userId && children;
 }

@@ -1,21 +1,51 @@
+import { Link } from "react-router";
 import { useState, useEffect } from "react";
-import { API } from "aws-amplify";
-import { NoteType } from "../types/note";
-import { onError } from "../lib/errorLib";
-import { BsPencilSquare } from "react-icons/bs";
-import ListGroup from "react-bootstrap/ListGroup";
-import { LinkContainer } from "react-router-bootstrap";
-import { useAppContext } from "../lib/contextLib";
-import "./Home.css";
+import { HiOutlinePencilSquare } from "react-icons/hi2";
+import config from "../config";
+import { onError } from "../lib/error";
+import { useAuthFetch } from "../lib/fetch";
+import { useAccount } from "../AccountContext";
+
+const landerCs =
+  `py-20 text-center flex flex-col gap-2`;
+const landerTitleCs =
+  `text-4xl font-semibold`;
+const landerDescCs =
+  `text-gray-500
+  dark:text-gray-400`;
+const notesCs =
+  `flex flex-col gap-4`;
+const notesTitleCs =
+  `pb-3 text-3xl font-serif font-medium border-b border-gray-200
+  dark:border-gray-700`;
+const listCs =
+  `border border-gray-200 rounded-md overflow-hidden
+  dark:border-gray-700`;
+const listItemCs =
+  `flex flex-col gap-1 py-3 px-4 border-gray-200 hover:bg-gray-100
+  dark:border-gray-700 dark:hover:bg-gray-800`;
+const listItemTitleCs =
+  `font-semibold truncate`;
+const listItemDescCs =
+  `text-gray-500 text-sm truncate
+  dark:text-gray-400`;
+const listNewItemCs =
+  `flex items-center gap-2 py-3 px-4 border-gray-200 hover:bg-gray-100
+  dark:border-gray-700 dark:hover:bg-gray-800`;
+const listNewItemIconCs =
+  `shrink-0`;
+const listNewItemTitleCs =
+  `font-semibold truncate`;
 
 export default function Home() {
-  const [notes, setNotes] = useState<Array<NoteType>>([]);
-  const { isAuthenticated } = useAppContext();
+  const account = useAccount();
+  const authFetch = useAuthFetch();
+  const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function onLoad() {
-      if (!isAuthenticated) {
+      if (!account.userId) {
         return;
       }
 
@@ -30,35 +60,37 @@ export default function Home() {
     }
 
     onLoad();
-  }, [isAuthenticated]);
+  }, [account.userId]);
 
   function loadNotes() {
-    return API.get("notes", "/notes", {});
+    return authFetch(`${config.API_URL}/notes`);
   }
 
   function formatDate(str: undefined | string) {
     return !str ? "" : new Date(str).toLocaleString();
   }
 
-  function renderNotesList(notes: NoteType[]) {
+  function renderNotesList(notes: Record<string, string>[]) {
     return (
       <>
-        <LinkContainer to="/notes/new">
-          <ListGroup.Item action className="py-3 text-nowrap text-truncate">
-            <BsPencilSquare size={17} />
-            <span className="ms-2 fw-bold">Create a new note</span>
-          </ListGroup.Item>
-        </LinkContainer>
-        {notes.map(({ noteId, content, createdAt }) => (
-          <LinkContainer key={noteId} to={`/notes/${noteId}`}>
-            <ListGroup.Item action className="text-nowrap text-truncate">
-              <span className="fw-bold">{content.trim().split("\n")[0]}</span>
-              <br />
-              <span className="text-muted">
-                Created: {formatDate(createdAt)}
-              </span>
-            </ListGroup.Item>
-          </LinkContainer>
+        <Link
+          to="/notes/new"
+          className={`${listNewItemCs} ${notes.length > 0 ? 'border-b' : ''}`}
+        >
+          <span className={listNewItemIconCs}>
+            <HiOutlinePencilSquare size={17} />
+          </span>
+          <span className={listNewItemTitleCs}>Create a new note</span>
+        </Link>
+        {notes.map(({ noteId, content, createdAt }, index) => (
+          <Link
+            key={noteId}
+            to={`/notes/${noteId}`}
+            className={`${listItemCs} ${index < notes.length - 1 ? 'border-b' : ''}`}
+          >
+            <h2 className={listItemTitleCs}>{content.trim().split("\n")[0]}</h2>
+            <p className={listItemDescCs}>Created: {formatDate(createdAt)}</p>
+          </Link>
         ))}
       </>
     );
@@ -66,25 +98,23 @@ export default function Home() {
 
   function renderLander() {
     return (
-      <div className="lander">
-        <h1>Scratch</h1>
-        <p className="text-muted">A simple note taking app</p>
+      <div className={landerCs}>
+        <h1 className={landerTitleCs}>Scratch</h1>
+        <p className={landerDescCs}>A simple note taking app</p>
       </div>
     );
   }
 
   function renderNotes() {
     return (
-      <div className="notes">
-        <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
-        <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+      <div className={notesCs}>
+        <h2 className={notesTitleCs}>Your Notes</h2>
+        {!isLoading && <div className={listCs}>{renderNotesList(notes)}</div>}
       </div>
     );
   }
 
-  return (
-    <div className="Home">
-      {isAuthenticated ? renderNotes() : renderLander()}
-    </div>
-  );
+  return account.userId
+    ? renderNotes()
+    : renderLander();
 }

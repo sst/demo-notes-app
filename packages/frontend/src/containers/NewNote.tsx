@@ -1,17 +1,14 @@
 import React, { useRef, useState } from "react";
-import { API } from "aws-amplify";
-import Form from "react-bootstrap/Form";
-import { NoteType } from "../types/note";
-import { s3Upload } from "../lib/awsLib";
-import Stack from "react-bootstrap/Stack";
-import { onError } from "../lib/errorLib";
-import { useNavigate } from "react-router-dom";
-import LoaderButton from "../components/LoaderButton";
+import { useNavigate } from "react-router";
 import config from "../config";
-import "./NewNote.css";
+import { formCs } from "../lib/styles";
+import { onError } from "../lib/error";
+import Button from "../components/Button";
+import { useAuthFetch } from "../lib/fetch";
 
 export default function NewNote() {
   const file = useRef<null | File>(null);
+  const authFetch = useAuthFetch();
   const nav = useNavigate();
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,10 +22,33 @@ export default function NewNote() {
     file.current = event.currentTarget.files[0];
   }
 
-  function createNote(note: NoteType) {
-    return API.post("notes", "/notes", {
-      body: note,
+  function createNote(content: string, attachment?: string) {
+    return authFetch(`${config.API_URL}/notes`, {
+      method: "POST",
+      body: JSON.stringify({ content, attachment }),
     });
+  }
+
+  function getPresignedUpload(fileName: string, fileType: string) {
+    return authFetch(`${config.API_URL}/presign`, {
+      method: "POST",
+      body: JSON.stringify({ fileName, fileType }),
+    });
+  }
+
+  async function handleUpload(file: File) {
+    const res = await getPresignedUpload(file.name, file.type);
+
+    await fetch(res.url, {
+      body: file,
+      method: "PUT",
+      headers: {
+        "Content-Type": file.type,
+        "Content-Disposition": `attachment; filename="${file.name}"`,
+      },
+    });
+
+    return res.path;
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -46,10 +66,10 @@ export default function NewNote() {
 
     try {
       const attachment = file.current
-        ? await s3Upload(file.current)
+        ? await handleUpload(file.current)
         : undefined;
 
-      await createNote({ content, attachment });
+      await createNote(content, attachment);
       nav("/");
     } catch (e) {
       onError(e);
@@ -58,31 +78,32 @@ export default function NewNote() {
   }
 
   return (
-    <div className="NewNote">
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="content">
-          <Form.Control
-            value={content}
-            as="textarea"
-            onChange={(e) => setContent(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mt-2" controlId="file">
-          <Form.Label>Attachment</Form.Label>
-          <Form.Control onChange={handleFileChange} type="file" />
-        </Form.Group>
-        <Stack>
-          <LoaderButton
-            size="lg"
-            type="submit"
-            variant="primary"
-            isLoading={isLoading}
-            disabled={!validateForm()}
-          >
-            Create
-          </LoaderButton>
-        </Stack>
-      </Form>
-    </div>
+    <form onSubmit={handleSubmit} className={formCs.container}>
+      <textarea
+        id="content"
+        value={content}
+        className={formCs.textarea}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <div className={formCs.field}>
+        <label htmlFor="file" className={formCs.label}>Attachment</label>
+        <input
+          id="file"
+          type="file"
+          className={formCs.file}
+          onChange={handleFileChange}
+        />
+      </div>
+      <div className={formCs.controls}>
+        <Button
+          type="submit"
+          variant="success"
+          loading={isLoading}
+          disabled={!validateForm()}
+        >
+          Create
+        </Button>
+      </div>
+    </form>
   );
 }
